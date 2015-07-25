@@ -1,7 +1,9 @@
-window.Square = function(){
+window.Square = function(renderer){
   return {
     _points: [],
     _twistedPoints: [],
+
+    _renderer: renderer,
 
     settings: {
       tessalationLevel: 3,
@@ -19,6 +21,15 @@ window.Square = function(){
       vec2(  0.5,  0.5),
       vec2(  0.5, -0.5)
     ],
+
+    init: function(){
+      this.generatePoints();
+      this.twist();
+
+      this._renderer.init();
+      this._renderer.load(this._twistedPoints);
+      this._renderer.render();
+    },
 
     generatePoints: function(){
       var tessalator = SquareTessalator( this.settings.keep );
@@ -44,8 +55,9 @@ window.Square = function(){
       }
     },
 
-    getPointData: function(){
-      return this._twistedPoints;
-    }
+    render: function(){
+      this._renderer.load(this._twistedPoints);
+      this._renderer.render();
+    },
   };
 }

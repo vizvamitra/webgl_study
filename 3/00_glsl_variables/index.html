@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - GLSL variables</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 vPosition;
+    attribute vec4 vColor;
+    uniform float angle;
+    varying vec4 fColor;
+
+    void main(){
+      float length = length(vPosition);
+      float twistAngle = angle*length;
+      mat2 rotate = mat2(
+        cos(twistAngle), -sin(twistAngle),
+        sin(twistAngle), cos(twistAngle)
+      );
+      
+      gl_Position = vec4(rotate*vPosition, 0.0, 1.0);
+      fColor = vColor;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 fColor;
+
+    void main(){
+      gl_FragColor = fColor;
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/tessalators/triangle_tessalator.js"></script>
+  <script type="text/javascript" src="js/tessalators/square_tessalator.js"></script>
+  <script type="text/javascript" src="js/models/triangle.js"></script>
+  <script type="text/javascript" src="js/models/square.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/3/00_glsl_variables'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas-triangle' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+    
+    
+    <form class='controls'>
+      <fieldset class='ranges'>
+        <label for='tessalationLevel'>Tessalation level</label>
+        <output class='tessalationLevel'>5</output>
+        <input type='range' name='tessalationLevel' min=0 max=10 step=1 value=5 oninput='handleTLChange(event, triangle)'><br>
+
+        <label for='angle'>Angle</label>
+        <output class='angle'>90</output>
+        <input type='range' name='angle' min=0 max=540 step=15 value=90 oninput='handleAngleChange(event, triangle)'><br>
+      </fieldset>
+
+      <fieldset>
+        <legend>Keep:</legend>
+
+        <table>
+          <tr>
+            <td></td>
+            <td><input type='checkbox' checked onchange='handleKeepChange(event, 0, triangle)'></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><input type='checkbox' onchange='handleKeepChange(event, 1, triangle)'></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><input type='checkbox' checked onchange='handleKeepChange(event, 2, triangle)'></td>
+            <td></td>
+            <td><input type='checkbox' checked onchange='handleKeepChange(event, 3, triangle)'></td>
+          </tr>
+        </table>
+      </fieldset>
+    </form>
+  </div>
+
+  <br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas-square' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+    
+    <form class='controls'>
+      <fieldset class='ranges'>
+        <label for='tessalationLevel'>Tessalation level</label>
+        <output class='tessalationLevel'>3</output>
+        <input type='range' name='tessalationLevel' min=0 max=7 step=1 value=3 oninput='handleTLChange(event, square)'><br>
+
+        <label for='angle'>Angle</label>
+        <output class='angle'>90</output>
+        <input type='range' name='angle' min=0 max=540 step=15 value=90 oninput='handleAngleChange(event, square)'><br>
+      </fieldset>
+
+      <fieldset class='keep-checkboxes'>
+        <legend>Keep:</legend>
+
+        <input type='checkbox' checked onchange='handleKeepChange(event, 0, square)'>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 1, square)'>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 2, square)'><br>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 3, square)'>
+        <input type='checkbox'         onchange='handleKeepChange(event, 4, square)'>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 5, square)'><br>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 6, square)'>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 7, square)'>
+        <input type='checkbox' checked onchange='handleKeepChange(event, 8, square)'>
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>
