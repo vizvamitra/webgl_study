@@ -11,8 +11,8 @@ window.Renderer = function(canvasId, tessalatorFactory){
 
     _angleLoc: undefined,
 
-    _points: [],
-    _colors: [],
+    _pointCount: 0,
+    _colorCount: 0,
 
     init: function(){
       this._initGL();
@@ -20,24 +20,7 @@ window.Renderer = function(canvasId, tessalatorFactory){
 
     render: function(){
       this._gl.clear( this._gl.COLOR_BUFFER_BIT );
-      this._gl.drawArrays( this._gl.TRIANGLES, 0, this._points.length );
-    },
-
-    load: function(points, colors, angle){
-      this._points = points;
-      this._colors = colors;
-
-      this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._vBufferId );
-      this._gl.bufferData( this._gl.ARRAY_BUFFER, flatten(this._points), this._gl.STATIC_DRAW );
-      this._gl.vertexAttribPointer( this._vPosition, 2, this._gl.FLOAT, false, 0, 0 );
-      this._gl.enableVertexAttribArray( this._vPosition );
-
-      this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._cBufferId );
-      this._gl.bufferData( this._gl.ARRAY_BUFFER, flatten(this._colors), this._gl.STATIC_DRAW );
-      this._gl.vertexAttribPointer( this._vColor, 2, this._gl.FLOAT, false, 0, 0 );
-      this._gl.enableVertexAttribArray( this._vColor );
-
-      this._gl.uniform1f(this._angleLoc, angle);
+      this._gl.drawArrays( this._gl.TRIANGLES, 0, this._pointsCount );
     },
 
     _initGL: function(){
@@ -59,5 +42,24 @@ window.Renderer = function(canvasId, tessalatorFactory){
 
       this._angleLoc = this._gl.getUniformLocation(this._program, 'angle');
     },
+
+    loadGeometry: function(points, colors){
+      this._pointsCount = points.length;
+      this._colorsCount = colors.length;
+
+      this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._vBufferId );
+      this._gl.bufferData( this._gl.ARRAY_BUFFER, flatten(points), this._gl.STATIC_DRAW );
+      this._gl.vertexAttribPointer( this._vPosition, 2, this._gl.FLOAT, false, 0, 0 );
+      this._gl.enableVertexAttribArray( this._vPosition );
+
+      this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._cBufferId );
+      this._gl.bufferData( this._gl.ARRAY_BUFFER, flatten(colors), this._gl.STATIC_DRAW );
+      this._gl.vertexAttribPointer( this._vColor, 2, this._gl.FLOAT, false, 0, 0 );
+      this._gl.enableVertexAttribArray( this._vColor );
+    },
+
+    loadUniforms: function(angle){
+      this._gl.uniform1f(this._angleLoc, angle);
+    }
   };
 }

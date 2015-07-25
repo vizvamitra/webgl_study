@@ -22,10 +22,10 @@ window.Triangle = function(renderer){
     ],
 
     init: function(){
-      this.generatePoints();
-
       this._renderer.init();
-      this._renderer.load(this._points, this._colors, this.settings.angle);
+
+      this.generatePoints();
+      this._renderer.loadGeometry(this._points, this._colors);
       this._renderer.render();
     },
 
@@ -40,10 +40,11 @@ window.Triangle = function(renderer){
       );
 
       this._colors = this._points;
+      this._renderer.loadGeometry(this._points, this._colors);
     },
 
     render: function(){
-      this._renderer.load(this._points, this._colors, this.settings.angle);
+      this._renderer.loadUniforms(this.settings.angle);
       this._renderer.render();
     },
   };
