@@ -11,7 +11,7 @@
 
 window.TriangleTessalator = function(keep){
   return {
-    _keep: keep,
+    _keep: keep || [ true, true, true, true ],
 
     _points: [],
 
@@ -23,10 +23,10 @@ window.TriangleTessalator = function(keep){
         var bc = mix(b,c, 0.5);
         var ac = mix(a,c, 0.5);
 
-        if(this._keep.left){ this.tessalate(a, ab, ac, count-1); }
-        if(this._keep.top){ this.tessalate(ab, b, bc, count-1); }
-        if(this._keep.right){ this.tessalate(ac, bc, c, count-1); }
-        if(this._keep.middle){ this.tessalate(ab, bc, ac, count-1); }
+        if(this._keep[0]){ this.tessalate(ab, b, bc, count-1); }
+        if(this._keep[1]){ this.tessalate(ab, bc, ac, count-1); }
+        if(this._keep[2]){ this.tessalate(a, ab, ac, count-1); }
+        if(this._keep[3]){ this.tessalate(ac, bc, c, count-1); }
       }
 
       return this._points;

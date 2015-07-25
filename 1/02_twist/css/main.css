@@ -2,7 +2,7 @@ body{
   text-align: center;
 }
 
-#container{
+.container{
   margin: auto;
   width: 750px;
   overflow: auto;
@@ -14,7 +14,7 @@ canvas{
   float: left;
 }
 
-#controls{ 
+.controls{ 
   width: 348px;
   float: left;
   text-align: left;
@@ -24,9 +24,9 @@ fieldset{
   border: none;
 }
 
-#ranges input{float: right;}
+.ranges input{float: right;}
 
-#ranges output{
+.ranges output{
   float: right;
   width: 40px;
 }
