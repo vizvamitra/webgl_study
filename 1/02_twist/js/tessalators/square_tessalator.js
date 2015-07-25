@@ -1,14 +1,3 @@
-/*
-  USAGE:
-
-  // 4 values for each of 4 new triangles. true is for keep, false - for skip
-  var tessalator = TriangleTessalator(true, true, true, true);
-
-  // a - bottom-left vertex, b - top vertex, c - bottom-right vertex
-  // returns result of tessalation - array of points
-  var points = tessalator.tessalate(a, b, c, 5);
-*/
-
 window.SquareTessalator = function(keep){
   return {
     _keep: keep || [
