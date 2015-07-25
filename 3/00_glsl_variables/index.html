@@ -13,8 +13,8 @@
       float length = length(vPosition);
       float twistAngle = angle*length;
       mat2 rotate = mat2(
-        cos(twistAngle), -sin(twistAngle),
-        sin(twistAngle), cos(twistAngle)
+        cos(twistAngle), sin(twistAngle),
+        -sin(twistAngle), cos(twistAngle)
       );
       
       gl_Position = vec4(rotate*vPosition, 0.0, 1.0);
