@@ -1,4 +1,4 @@
-window.Renderer = function(canvasId, tessalatorFactory){
+window.Renderer = function(canvasId){
   return {
     _gl: undefined,
     _program: undefined,
