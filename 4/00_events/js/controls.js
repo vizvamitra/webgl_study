@@ -3,6 +3,7 @@ window.Controls = function(canvasId){
     _canvas: undefined,
 
     _sizeInput: undefined,
+    _opacityInput: undefined,
     _colorSelect: undefined,
 
     _buttons: {
@@ -12,11 +13,18 @@ window.Controls = function(canvasId){
     _colors: {
       black: vec4(0.0, 0.0, 0.0, 1.0),
       red: vec4(1.0, 0.0, 0.0, 1.0),
-      green: vec4(0.0, 1.0, 0.0, 1.0),
+      orange: vec4(1.0, 0.647, 0.0, 1.0),
+      yellow: vec4(1.0, 1.0, 0.0, 1.0),
+      green: vec4(0.0, 0.5, 0.0, 1.0),
+      skyblue: vec4(0.53, 0.808, 0.922, 1.0),
       blue: vec4(0.0, 0.0, 1.0, 1.0),
+      violet: vec4(0.933, 0.51, 0.933, 1.0),
+      white: vec4(1.0, 1.0, 1.0, 1.0),
     },
 
-    size: 0.009,
+    _opacity: 1.0,
+
+    size: 0.015,
     color: vec4(0.0, 0.0, 0.0, 1.0),
 
     _mousePos: undefined,
@@ -25,6 +33,7 @@ window.Controls = function(canvasId){
       this._canvas = document.getElementById(canvasId);
 
       this._sizeInput = document.querySelector('input#size');
+      this._opacityInput = document.querySelector('input#opacity');
       this._colorSelect = document.querySelector('select#color');
 
       this._registerControls();
@@ -51,6 +60,7 @@ window.Controls = function(canvasId){
       this._canvas.addEventListener('mouseup', this._onMouseUp.bind(this));
 
       this._sizeInput.addEventListener('input', this._onSizeChange.bind(this));
+      this._opacityInput.addEventListener('input', this._onOpacityChange.bind(this));
       this._colorSelect.addEventListener('input', this._onColorChange.bind(this));
     },
 
@@ -81,16 +91,23 @@ window.Controls = function(canvasId){
     },
 
     _onSizeChange: function(event){
-      input = event.target;
-      this.size = parseFloat(input.value)*0.003;
+      this.size = parseFloat(this._sizeInput.value)*0.005;
 
-      output = input.parentNode.getElementsByClassName('size')[0];
-      output.innerHTML = input.value;
+      output = this._sizeInput.parentNode.querySelector('output.size');
+      output.innerHTML = this._sizeInput.value;
+    },
+
+    _onOpacityChange: function(event){
+      this._opacity = this._opacityInput.value / 100;
+      this.color[3] = this._opacity;
+
+      output = this._opacityInput.parentNode.querySelector('output.opacity');
+      output.innerHTML = this._opacityInput.value + '%';
     },
 
     _onColorChange: function(event){
-      select = event.target;
-      this.color = this._colors[select.value];
-    }
+      this.color = this._colors[this._colorSelect.value];
+      this.color[3] = this._opacity;
+    },
   };
 }

@@ -54,16 +54,25 @@
       <fieldset class='ranges'>
         <label for='size'>Size</label>
         <output class='size'>3</output>
-        <input type='range' id='size' name='size' min=1 max=15 step=1 value=3>
+        <input type='range' id='size' name='size' min=1 max=15 step=1 value=3><br>
+
+        <label for='opacity'>Opacity</label>
+        <output class='opacity'>100%</output>
+        <input type='range' id='opacity' name='opacity' min=0 max=100 step=1 value=100>
       </fieldset>
 
       <fieldset>
         <label style='vertical-align: top;'>Color:</label>
-        <select id='color' name='color' size=4>
+        <select id='color' name='color' size=9>
           <option selected value='black'>Black</option>
           <option value='red'>Red</option>
+          <option value='orange'>Orange</option>
+          <option value='yellow'>Yellow</option>
           <option value='green'>Green</option>
+          <option value='skyblue'>Sky blue</option>
           <option value='blue'>Blue</option>
+          <option value='violet'>Violet</option>
+          <option value='white'>White</option>
         </select>
       </fieldset>
     </form>

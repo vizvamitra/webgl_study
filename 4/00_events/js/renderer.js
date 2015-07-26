@@ -35,6 +35,9 @@ window.Renderer = function(canvasId){
       this._program = initShaders( this._gl, "vertex-shader", "fragment-shader" );
       this._gl.useProgram( this._program );
 
+      this._gl.enable(this._gl.BLEND);
+      this._gl.blendFunc (this._gl.SRC_ALPHA, this._gl.ONE_MINUS_SRC_ALPHA);
+
       this._vBufferId = this._gl.createBuffer();
       this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._vBufferId );
       this._gl.bufferData( this._gl.ARRAY_BUFFER, sizeof['vec2']*this._maxVertices, this._gl.STATIC_DRAW );
