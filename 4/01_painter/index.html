@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - Events</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+
+    void main(){
+      gl_Position = vPosition;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 fColor;
+
+    void main(){
+      gl_FragColor = fColor;
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/controls.js"></script>
+  <script type="text/javascript" src="js/brush.js"></script>
+  <script type="text/javascript" src="js/line.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/4/00_events'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+    
+    
+    <form class='controls'>
+      <fieldset class='ranges'>
+        <label for='width'>Width</label>
+        <output class='width'>3</output>
+        <input type='range' id='width' name='width' min=1 max=15 step=1 value=3><br>
+
+        <label for='opacity'>Opacity (ugly!)</label>
+        <output class='opacity'>100%</output>
+        <input type='range' id='opacity' name='opacity' min=0 max=100 step=1 value=100>
+      </fieldset>
+
+      <fieldset>
+        <label style='vertical-align: top;'>Color:</label>
+        <select id='color' name='color' size=9>
+          <option selected value='black'>Black</option>
+          <option value='red'>Red</option>
+          <option value='orange'>Orange</option>
+          <option value='yellow'>Yellow</option>
+          <option value='green'>Green</option>
+          <option value='skyblue'>Sky blue</option>
+          <option value='blue'>Blue</option>
+          <option value='violet'>Violet</option>
+          <option value='white'>White</option>
+        </select>
+        <button style='vertical-align: top;' id='clear'>Clear</button>
+        <button style='vertical-align: top;' id='undo'>Undo</button>
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>
