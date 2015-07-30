@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - Painter</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    attribute vec4 vColor;
+    varying vec4 fColor;
+    uniform mat4 uModelViewProjMatrix;
+
+    void main(){
+      gl_Position = uModelViewProjMatrix*vPosition;
+      fColor = vColor;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 fColor;
+
+    void main(){
+      gl_FragColor = fColor;
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/meshes/cube_mesh.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/cube.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/5/00_cube'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+  </div>
+
+</body>
+</html>
