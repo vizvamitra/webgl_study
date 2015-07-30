@@ -41,6 +41,25 @@
     <canvas id='gl-canvas' width=300 height=300>
       Canvas is not supported by your browser...
     </canvas>
+
+    <form class='controls'>
+      <fieldset class='ranges'>
+        <label for='rotationSpeed'>Rotation speed</label>
+        <output class='rotationSpeed'>1</output>
+        <input type='range' name='rotationSpeed' min=0 max=5 step=0.1 value=1 oninput='onRotationSpeedChange(event)'><br>
+      </fieldset>
+
+      <fieldset>
+        <label style='vertical-align: top;'>Rotation axis:</label>
+        <select id='axis' name='axis' size=3 onchange='onRotationAxisChange(event);'>
+          <option value='x'> x </option>
+          <option selected value='y'> y </option>
+          <option value='z'> z </option>
+        </select><br><br>
+
+        <button onclick='onRotationDirectionChange(event);'>Change rotation direction</button>
+      </fieldset>
+    </form>
   </div>
 
 </body>
