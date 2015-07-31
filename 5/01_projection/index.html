@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - Painter</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    attribute vec4 vColor;
+    varying vec4 fColor;
+    uniform mat4 uModelViewProjMatrix;
+
+    void main(){
+      gl_Position = uModelViewProjMatrix*vPosition;
+      fColor = vColor;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 fColor;
+
+    void main(){
+      gl_FragColor = fColor;
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/meshes/cube_mesh.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/cube.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/5/01_projection'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+
+    <form class='controls'>
+      <fieldset class='ranges'>
+        <label for='rotationSpeed'>Rotation speed</label>
+        <output class='rotationSpeed'>1</output>
+        <input type='range' name='rotationSpeed' min=0 max=5 step=0.1 value=1 oninput='onRotationSpeedChange(event)'><br>
+      </fieldset>
+
+      <fieldset>
+        <label style='vertical-align: top;'>Rotation axis:</label>
+        <select id='axis' name='axis' size=3 onchange='onRotationAxisChange(event);'>
+          <option value='x'> x </option>
+          <option selected value='y'> y </option>
+          <option value='z'> z </option>
+        </select><br><br>
+
+        <button onclick='onRotationDirectionChange(event);'>Change rotation direction</button>
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>
