@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - CAD</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    uniform mat4 uModelMatrix;
+    uniform mat4 uViewProjMatrix;
+
+    void main(){
+      gl_Position = uViewProjMatrix*uModelMatrix*vPosition;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 fColor;
+
+    void main(){
+      gl_FragColor = fColor;
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="js/vendor/react-0.13.3.js"></script>
+  <script type="text/javascript" src="js/vendor/JSXTransformer-0.13.3.js"></script>
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/meshes/cube.js"></script>
+  <script type="text/javascript" src="js/meshes/sphere.js"></script>
+  <script type="text/javascript" src="js/meshes/cone.js"></script>
+  <script type="text/javascript" src="js/meshes/cylinder.js"></script>
+  <script type="text/jsx"        src="js/components/scene_controls.js"></script>
+  <script type="text/jsx"        src="js/components/instance_controls.js"></script>
+  <script type="text/jsx"        src="js/components/ranges.js"></script>
+  <script type="text/jsx"        src="js/components/controls.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/camera.js"></script>
+  <script type="text/javascript" src="js/instance.js"></script>
+  <script type="text/javascript" src="js/scene.js"></script>
+  <script type="text/jsx"        src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/6/00_cad'>Github</a><br><br>
+
+  <div id='container'>
+    <canvas id='gl-canvas' width='500' height='500'>
+      Canvas is not supported by your browser...
+    </canvas>
+
+    <div id='controls-container'></div>
+
+    <div id='info'>
+      <p>User interface made using React.js</p>
+      <p>Meshes created in Blender</p>
+    </div>
+
+    <div id='comments'>
+      <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES * * */
+            var disqus_shortname = 'vizvamitragithubio';
+            var disqus_identifier = '6/00_cad';
+            var disqus_title = 'WebGL - CAD';
+            
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+      </div>
+  </div>
+
+</body>
+</html>
