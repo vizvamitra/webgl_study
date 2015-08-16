@@ -32,8 +32,10 @@ form#instance-controls{ width: 280px; }
 #scene-controls select#meshSelect{ width: 77%; }
 #scene-controls button#createBtn{ width: 20%; margin-left: 5px; }
 #scene-controls button#exportBtn{ width: 100%; }
+#scene-controls button#importBtn{ width: 100%; }
 #scene-controls button#deleteBtn{ width: 100%; }
 #scene-controls button#clearBtn{ width: 100%; }
+#scene-controls input#importFile{ display: none; }
 #scene-controls button{ margin-bottom: 10px; }
 
 #instance-controls label[for=name]{ width: 20%; }

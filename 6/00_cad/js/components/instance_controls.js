@@ -17,7 +17,9 @@ window.InstanceControls = React.createClass({
 
   render: function() {
     if (!this.props.instance){
-      return <p>Please select an instance to edit</p>
+      return <form id='instance-controls'>
+        <p>Please select an instance to edit</p>
+      </form>
     }
 
     var color = '#' +

@@ -58,12 +58,29 @@ window.Controls = React.createClass({
     });
   },
 
+  onImport: function(data){
+    if (data.instances && data.instances.length > 0){
+      scene.loadJson(JSON.stringify(data.instances));
+    };
+    if (data.currentId){
+      var newCurrent = this.setCurrentInstance(data.currentId);
+    };
+    if(!newCurrent && scene.instances.length > 0){
+      newCurrent = scene.instances[0];
+    }
+
+    this.setState({
+      instances: scene.instances,
+      currentInstance: newCurrent
+    });
+  },
+
   setCurrentInstance: function(index){
     if(this.state.currentInstance){
       this.state.currentInstance.wireframeColor = vec4(1.0, 1.0, 1.0, 1.0);
     }
 
-    newCurrent = scene.instances[index];
+    var newCurrent = scene.instances[index];
     newCurrent.wireframeColor = vec4(1.0, 0.0, 0.0, 1.0);
     return newCurrent
   },
@@ -76,6 +93,7 @@ window.Controls = React.createClass({
         onInstanceCreate={this.onInstanceCreate}
         onInstanceDelete={this.onInstanceDelete}
         onClearScene={this.onClearScene}
+        onImport={this.onImport}
         onCurrentInstanceSelect={this.onCurrentInstanceSelect} />
 
       <InstanceControls
