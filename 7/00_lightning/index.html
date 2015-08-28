@@ -17,7 +17,6 @@
     
     uniform mat4 uModelMatrix;
     uniform mat4 uViewProjMatrix;
-    uniform vec4 uLightPosition;
 
     varying vec3 fNormal, fPosition;
 
@@ -57,7 +56,7 @@
       vec3 L = normalize( (uLight.position.w == 0.0) ? uLight.position.xyz : uLight.position.xyz/uLight.position.w - fPosition );
       vec3 N = fNormal;
       vec3 E = normalize(uCameraPos.xyz - fPosition).xyz;
-      vec3 R = normalize(reflect(L, N));
+      vec3 R = normalize(reflect(L,N));
 
       vec4 ambient = uLight.ambient * uMaterial.ambient;
 
@@ -79,6 +78,8 @@
   <script type="text/javascript" src="../../common/mv.js"></script>
   <script type="text/javascript" src="js/meshes/cube.js"></script>
   <script type="text/javascript" src="js/meshes/sphere.js"></script>
+  <script type="text/javascript" src="js/meshes/torus.js"></script>
+  <script type="text/javascript" src="js/meshes/monkey.js"></script>
   <script type="text/javascript" src="js/renderer.js"></script>
   <script type="text/javascript" src="js/camera.js"></script>
   <script type="text/javascript" src="js/light.js"></script>

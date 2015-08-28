@@ -7,6 +7,8 @@ window.Renderer = function(canvasId){
   this._meshes = {
     cube: new Cube(),
     sphere: new Sphere(),
+    torus: new Torus(),
+    monkey: new Monkey(),
   };
 
   this._vPosition = undefined;
@@ -81,7 +83,6 @@ Renderer.prototype._initGL = function(){
 Renderer.prototype._initUniformLocations = function(){
   this._uniformLocs.modelMatrix = this._gl.getUniformLocation(this._program, 'uModelMatrix');
   this._uniformLocs.viewProjMatrix = this._gl.getUniformLocation(this._program, 'uViewProjMatrix');
-  this._uniformLocs.lightPosition = this._gl.getUniformLocation(this._program, 'uLightPosition');
 
   this._uniformLocs.light.position = this._gl.getUniformLocation(this._program, 'uLight.position');
   this._uniformLocs.light.ambient = this._gl.getUniformLocation(this._program, 'uLight.ambient');
@@ -114,7 +115,6 @@ Renderer.prototype._initMeshes = function(){
 
 Renderer.prototype._loadUniforms = function(instance, light, camera){
   this._gl.uniformMatrix4fv(this._uniformLocs.modelMatrix, false, flatten(instance.modelMatrix()));
-  this._gl.uniform4fv(this._uniformLocs.lightPosition, light.position);
 
   material = this._meshes[instance.mesh].material;
   this._gl.uniform4fv(this._uniformLocs.material.ambient, material.ambient);

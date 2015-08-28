@@ -6,7 +6,7 @@ window.Scene = function(){
 Scene.prototype.init = function(){
   this.renderer = new Renderer('gl-canvas');
   this.renderer.init();
-  this.instances.push(new Instance('sphere'));
+  this.instances.push(new Instance('torus'));
 };
 
 Scene.prototype.render = function(camera, light){
