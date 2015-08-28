@@ -19,16 +19,16 @@ function initScene(){
   var canvas = document.getElementById('gl-canvas');
   camera = new Camera(
     canvas.width / canvas.height,
-    vec3(0.0, 2.0, 4.0),
+    vec4(0.0, 2.0, 4.0, 1.0),
     vec3(0.0, -0.5, -1.0),
     vec3(0.0, 1.0, -0.5)
   );
 
   light = new Light(
-    vec3(1.0, 1.0, 1.0),
-    vec3(0.5, -0.5, -0.5),
-    0.6,
-    0.9
+    vec4(-2.0, 2.0, 2.0, 1.0),
+    vec4(0.2, 0.2, 0.2, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0),
+    vec4(1.0, 1.0, 1.0, 1.0)
   );
 }
 

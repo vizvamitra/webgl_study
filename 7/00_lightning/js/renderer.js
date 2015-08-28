@@ -6,6 +6,7 @@ window.Renderer = function(canvasId){
 
   this._meshes = {
     cube: new Cube(),
+    sphere: new Sphere(),
   };
 
   this._vPosition = undefined;
@@ -13,19 +14,19 @@ window.Renderer = function(canvasId){
 
   this._uniformLocs = {
     modelMatrix: undefined,
-    viewProjMatrix: undefined,
-    cameraPos: undefined,
+    viewMatrix: undefined,
+    projMatrix: undefined,
     light: {
-      color: undefined,
-      direction: undefined,
-      aIntensity: undefined,
-      dIntensity: undefined
+      position: undefined,
+      ambient: undefined,
+      diffuse: undefined,
+      specular: undefined
     },
     material: {
-      ka: undefined,
-      kd: undefined,
-      ks: undefined,
-      ns: undefined
+      ambient: undefined,
+      diffuse: undefined,
+      specular: undefined,
+      shininess: undefined
     }
   }
 }
@@ -57,8 +58,8 @@ Renderer.prototype.clear = function(){
   this._gl.clear( this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 }
 
-Renderer.prototype.loadViewProjMatrix = function(matrix){
-  this._gl.uniformMatrix4fv(this._uniformLocs.viewProjMatrix, false, flatten(matrix));
+Renderer.prototype.loadViewProjMatrix = function(camera){
+  this._gl.uniformMatrix4fv(this._uniformLocs.viewProjMatrix, false, flatten(camera.viewProjMatrix()));
 }
 
 Renderer.prototype._initGL = function(){
@@ -80,17 +81,17 @@ Renderer.prototype._initGL = function(){
 Renderer.prototype._initUniformLocations = function(){
   this._uniformLocs.modelMatrix = this._gl.getUniformLocation(this._program, 'uModelMatrix');
   this._uniformLocs.viewProjMatrix = this._gl.getUniformLocation(this._program, 'uViewProjMatrix');
-  this._uniformLocs.cameraPos = this._gl.getUniformLocation(this._program, 'uCameraPos');
+  this._uniformLocs.lightPosition = this._gl.getUniformLocation(this._program, 'uLightPosition');
 
-  this._uniformLocs.light.color = this._gl.getUniformLocation(this._program, 'uLight.color');
-  this._uniformLocs.light.direction = this._gl.getUniformLocation(this._program, 'uLight.direction');
-  this._uniformLocs.light.aIntensity = this._gl.getUniformLocation(this._program, 'uLight.aIntensity');
-  this._uniformLocs.light.dIntensity = this._gl.getUniformLocation(this._program, 'uLight.dIntensity');
+  this._uniformLocs.light.position = this._gl.getUniformLocation(this._program, 'uLight.position');
+  this._uniformLocs.light.ambient = this._gl.getUniformLocation(this._program, 'uLight.ambient');
+  this._uniformLocs.light.diffuse = this._gl.getUniformLocation(this._program, 'uLight.diffuse');
+  this._uniformLocs.light.specular = this._gl.getUniformLocation(this._program, 'uLight.specular');
 
-  this._uniformLocs.material.ka = this._gl.getUniformLocation(this._program, 'uMaterial.ka');
-  this._uniformLocs.material.kd = this._gl.getUniformLocation(this._program, 'uMaterial.kd');
-  this._uniformLocs.material.ks = this._gl.getUniformLocation(this._program, 'uMaterial.ks');
-  this._uniformLocs.material.ns = this._gl.getUniformLocation(this._program, 'uMaterial.ns');
+  this._uniformLocs.material.ambient = this._gl.getUniformLocation(this._program, 'uMaterial.ambient');
+  this._uniformLocs.material.diffuse = this._gl.getUniformLocation(this._program, 'uMaterial.diffuse');
+  this._uniformLocs.material.specular = this._gl.getUniformLocation(this._program, 'uMaterial.specular');
+  this._uniformLocs.material.shininess = this._gl.getUniformLocation(this._program, 'uMaterial.shininess');
 };
 
 Renderer.prototype._initMeshes = function(){
@@ -113,16 +114,16 @@ Renderer.prototype._initMeshes = function(){
 
 Renderer.prototype._loadUniforms = function(instance, light, camera){
   this._gl.uniformMatrix4fv(this._uniformLocs.modelMatrix, false, flatten(instance.modelMatrix()));
-  this._gl.uniform3f(this._uniformLocs.cameraPos, camera.position[0], camera.position[1], camera.position[2]);
+  this._gl.uniform4fv(this._uniformLocs.lightPosition, light.position);
 
   material = this._meshes[instance.mesh].material;
-  this._gl.uniform3f(this._uniformLocs.material.ka, material.Ka[0], material.Ka[1], material.Ka[2]);
-  this._gl.uniform3f(this._uniformLocs.material.kd, material.Kd[0], material.Kd[1], material.Kd[2]);
-  this._gl.uniform3f(this._uniformLocs.material.ks, material.Ks[0], material.Ks[1], material.Ks[2]);
-  this._gl.uniform1f(this._uniformLocs.material.ns, material.Ns);
+  this._gl.uniform4fv(this._uniformLocs.material.ambient, material.ambient);
+  this._gl.uniform4fv(this._uniformLocs.material.diffuse, material.diffuse);
+  this._gl.uniform4fv(this._uniformLocs.material.specular, material.specular);
+  this._gl.uniform1f(this._uniformLocs.material.shininess, material.shininess);
 
-  this._gl.uniform3f(this._uniformLocs.light.color, light.color[0], light.color[1], light.color[2]);
-  this._gl.uniform3f(this._uniformLocs.light.direction, light.direction[0], light.direction[1], light.direction[2]);
-  this._gl.uniform1f(this._uniformLocs.light.aIntensity, light.aIntensity);
-  this._gl.uniform1f(this._uniformLocs.light.dIntensity, light.dIntensity);
+  this._gl.uniform4fv(this._uniformLocs.light.position, light.position);
+  this._gl.uniform4fv(this._uniformLocs.light.ambient, light.ambient);
+  this._gl.uniform4fv(this._uniformLocs.light.diffuse, light.diffuse);
+  this._gl.uniform4fv(this._uniformLocs.light.specular, light.specular);
 }

@@ -43,10 +43,10 @@ class ObjToMeshConverter
       file << "  this.nBufferId = undefined;\n\n"
 
       file << "  this.material = {\n"
-      file << "    Ka: vec3(#{@material.ka.join(', ')}),\n"
-      file << "    Kd: vec3(#{@material.kd.join(', ')}),\n"
-      file << "    Ks: vec3(#{@material.ks.join(', ')}),\n"
-      file << "    Ns: #{@material.ns}\n"
+      file << "    ambient: vec4(#{@material.ka.join(', ')}#{@material.ka.size == 3 ? ", 1.0" : ""}),\n"
+      file << "    diffuse: vec4(#{@material.kd.join(', ')}#{@material.kd.size == 3 ? ", 1.0" : ""}),\n"
+      file << "    specular: vec4(#{@material.ks.join(', ')}#{@material.ks.size == 3 ? ", 1.0" : ""}),\n"
+      file << "    shininess: #{@material.ns}\n"
       file << "  };\n\n"
 
       file << "  this.vertices = [\n"

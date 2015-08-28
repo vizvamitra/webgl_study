@@ -6,11 +6,11 @@ window.Scene = function(){
 Scene.prototype.init = function(){
   this.renderer = new Renderer('gl-canvas');
   this.renderer.init();
-  this.instances.push(new Instance('cube'));
+  this.instances.push(new Instance('sphere'));
 };
 
 Scene.prototype.render = function(camera, light){
-  this.renderer.loadViewProjMatrix(camera.viewProjMatrix());
+  this.renderer.loadViewProjMatrix(camera);
 
   this.renderer.clear();
 

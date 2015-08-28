@@ -4,18 +4,29 @@
   <title>WebGL - Lightning</title>
 
   <script id="vertex-shader" type="x-shader/x-vertex">
+    struct Light{
+      vec4 position;
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
+    };
+
     attribute vec4 vPosition;
     attribute vec4 vNormal;
+
+    
     uniform mat4 uModelMatrix;
     uniform mat4 uViewProjMatrix;
-    varying vec3 fNormal;
-    varying vec3 fPosition;
+    uniform vec4 uLightPosition;
+
+    varying vec3 fNormal, fPosition;
 
     void main(){
-      vec4 position = uViewProjMatrix*uModelMatrix*vPosition;
-      gl_Position = position;
-      fPosition = position.xyz;
-      fNormal = (uViewProjMatrix*uModelMatrix*vNormal).xyz;
+      vec4 worldPosition = uModelMatrix*vPosition;
+
+      gl_Position = uViewProjMatrix*worldPosition;
+      fPosition = worldPosition.xyz;
+      fNormal = normalize((uModelMatrix*vNormal).xyz);
     }
   </script>
 
@@ -23,46 +34,41 @@
     precision mediump float;
 
     struct Light{
-      vec3 color;
-      vec3 direction;
-      float aIntensity;
-      float dIntensity;
+      vec4 position;
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
     };
 
     struct Material{
-      vec3 ka;
-      vec3 kd;
-      vec3 ks;
-      float ns;
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
+      float shininess;
     };
-
+        
     uniform Light uLight;
-    uniform vec3 uCameraPos;
     uniform Material uMaterial;
-    varying vec3 fPosition;
-    varying vec3 fNormal;
+    uniform vec4 uCameraPos;
+
+    varying vec3 fNormal, fPosition;
 
     void main(){
-      vec4 aColor = vec4(uLight.color*uMaterial.ka*uLight.aIntensity, 1.0);
-      vec3 lightDir = normalize(uLight.direction);
+      vec3 L = normalize( (uLight.position.w == 0.0) ? uLight.position.xyz : uLight.position.xyz/uLight.position.w - fPosition );
+      vec3 N = fNormal;
+      vec3 E = normalize(uCameraPos.xyz - fPosition).xyz;
+      vec3 R = normalize(reflect(L, N));
 
-      // diffuse light
-      vec4 dColor = vec4(0.0, 0.0, 0.0, 0.0);
-      vec4 sColor = vec4(0.0, 0.0, 0.0, 0.0);
-      float dFactor = dot(normalize(fNormal), -lightDir);
-      if (dFactor > 0.0){
-        dColor = vec4(uLight.color*dFactor, 1.0);
+      vec4 ambient = uLight.ambient * uMaterial.ambient;
 
-        vec3 vToEye = normalize(uCameraPos - fPosition);
-        vec3 vReflected = normalize(lightDir - (2.0 * fNormal * dot(fNormal, lightDir)));
-        float specFactor = dot(vToEye, vReflected);
-        if (specFactor > 0.0){
-          specFactor = pow(specFactor, uMaterial.ns);
-          sColor = vec4(uLight.color * uMaterial.ks * specFactor, 1.0);
-        }
-      }
+      float Kd = max( dot(N,L), 0.0);
+      vec4 diffuse = Kd * (uLight.diffuse * uMaterial.diffuse);
 
-      gl_FragColor = aColor+dColor+sColor;
+      float Ks = pow( max( dot(E, R), 0.0), uMaterial.shininess );
+      vec4 specular = Ks * (uLight.specular * uMaterial.specular);
+
+      vec3 finalColor = (ambient+diffuse+specular).xyz;
+      gl_FragColor = vec4(finalColor, 1.0);
     }
   </script>
 
@@ -72,6 +78,7 @@
   <script type="text/javascript" src="../../common/init_shaders.js"></script>
   <script type="text/javascript" src="../../common/mv.js"></script>
   <script type="text/javascript" src="js/meshes/cube.js"></script>
+  <script type="text/javascript" src="js/meshes/sphere.js"></script>
   <script type="text/javascript" src="js/renderer.js"></script>
   <script type="text/javascript" src="js/camera.js"></script>
   <script type="text/javascript" src="js/light.js"></script>

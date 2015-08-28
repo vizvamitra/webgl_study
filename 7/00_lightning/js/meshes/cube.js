@@ -3,10 +3,10 @@ window.Cube = function(){
   this.nBufferId = undefined;
 
   this.material = {
-    Ka: vec3(0.2, 0.2, 0.2),
-    Kd: vec3(0.64, 0.64, 0.64),
-    Ks: vec3(0.5, 0.5, 0.5),
-    Ns: 96.078431
+    ambient: vec4(1.0, 0.0, 1.0, 1.0),
+    diffuse: vec4(1.0, 0.8, 0.0, 1.0),
+    specular: vec4(1.0, 0.8, 0.0, 1.0),
+    shininess: 100
   };
 
   this.vertices = [

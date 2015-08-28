@@ -1,5 +1,5 @@
 window.Camera = function(ar, position, target, up, fov, zNear, zFar){
-  this.position = position || vec3(0.0, 0.0, 0.0);
+  this.position = position || vec4(0.0, 0.0, 0.0, 1.0);
   this.target = target || vec3(0.0, 0.0, -1.0);
   this.up = up || vec3(0.0, 1.0, 0.0);
 
