@@ -1,6 +1,6 @@
 # Blender v2.72 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib torus.mtl
+mtllib torus_flat.mtl
 o Torus
 v 1.120814 0.553422 0.000000
 v 1.035440 0.650675 0.000000

@@ -7,7 +7,8 @@ window.Renderer = function(canvasId){
   this._meshes = {
     cube: new Cube(),
     sphere: new Sphere(),
-    torus: new Torus(),
+    torus_flat: new Torus(),
+    torus_smooth: new FlatTorus(),
     monkey: new Monkey(),
   };
 

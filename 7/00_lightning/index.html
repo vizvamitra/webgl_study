@@ -78,7 +78,8 @@
   <script type="text/javascript" src="../../common/mv.js"></script>
   <script type="text/javascript" src="js/meshes/cube.js"></script>
   <script type="text/javascript" src="js/meshes/sphere.js"></script>
-  <script type="text/javascript" src="js/meshes/torus.js"></script>
+  <script type="text/javascript" src="js/meshes/torus_flat.js"></script>
+  <script type="text/javascript" src="js/meshes/torus_smooth.js"></script>
   <script type="text/javascript" src="js/meshes/monkey.js"></script>
   <script type="text/javascript" src="js/renderer.js"></script>
   <script type="text/javascript" src="js/camera.js"></script>
@@ -98,9 +99,10 @@
     <form class='controls'>
       <fieldset>
         <label style='vertical-align: top;'>Model: </label>
-        <select id='mesh' name='mesh' size=4 onchange='onMeshChange(event);'>
+        <select id='mesh' name='mesh' size=5 onchange='onMeshChange(event);'>
           <option value='cube'> cube </option>
-          <option selected value='torus'> torus </option>
+          <option selected value='torus_flat'> flat torus </option>
+          <option value='torus_smooth'> smooth torus </option>
           <option value='sphere'> sphere </option>
           <option value='monkey'> monkey </option>
         </select>
