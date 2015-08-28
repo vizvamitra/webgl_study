@@ -3,9 +3,9 @@ window.Cube = function(){
   this.nBufferId = undefined;
 
   this.material = {
-    ambient: vec4(1.0, 0.0, 1.0, 1.0),
-    diffuse: vec4(1.0, 0.8, 0.0, 1.0),
-    specular: vec4(1.0, 0.8, 0.0, 1.0),
+    ambient: vec4(0.8, 0.8, 0.8, 1.0),
+    diffuse: vec4(0.8, 0.8, 0.8, 1.0),
+    specular: vec4(0.8, 0.8, 0.8, 1.0),
     shininess: 100
   };
 

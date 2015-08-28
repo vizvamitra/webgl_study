@@ -96,6 +96,16 @@
     </canvas>
 
     <form class='controls'>
+      <fieldset>
+        <label style='vertical-align: top;'>Model: </label>
+        <select id='mesh' name='mesh' size=4 onchange='onMeshChange(event);'>
+          <option value='cube'> cube </option>
+          <option selected value='torus'> torus </option>
+          <option value='sphere'> sphere </option>
+          <option value='monkey'> monkey </option>
+        </select>
+      </fieldset>
+
       <fieldset class='ranges'>
         <label for='rotationSpeed'>Rotation speed</label>
         <output class='rotationSpeed'>1</output>

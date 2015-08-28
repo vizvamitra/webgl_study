@@ -38,6 +38,11 @@ function mainLoop(){
   requestAnimFrame(mainLoop);
 }
 
+function onMeshChange(event){
+  event.preventDefault();
+  meshSelect = event.target;
+  scene.instances[0].mesh = meshSelect.value;
+}
 
 function onRotationAxisChange(event){
   event.preventDefault();
