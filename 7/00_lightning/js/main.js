@@ -1,4 +1,4 @@
-var scene, camera, light, rotation;
+var scene, camera, rotation;
 
 rotation = {
   axis: 1,
@@ -23,18 +23,11 @@ function initScene(){
     vec3(0.0, -0.5, -1.0),
     vec3(0.0, 1.0, -0.5)
   );
-
-  light = new Light(
-    vec4(-2.0, 2.0, 2.0, 1.0),
-    vec4(0.2, 0.2, 0.2, 1.0),
-    vec4(1.0, 1.0, 1.0, 1.0),
-    vec4(1.0, 1.0, 1.0, 1.0)
-  );
 }
 
 function mainLoop(){
   scene.instances[0].angles[rotation.axis] += rotation.direction*rotation.speed;
-  scene.render(camera, light);
+  scene.render(camera);
   requestAnimFrame(mainLoop);
 }
 

@@ -1,4 +1,4 @@
-window.Torus = function(){
+window.TorusFlat = function(){
   this.vBufferId = undefined;
   this.nBufferId = undefined;
 

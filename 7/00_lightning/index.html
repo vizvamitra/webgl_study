@@ -13,19 +13,20 @@
 
     attribute vec4 vPosition;
     attribute vec4 vNormal;
-
     
     uniform mat4 uModelMatrix;
-    uniform mat4 uViewProjMatrix;
+    uniform mat4 uViewMatrix;
+    uniform mat4 uProjMatrix;
 
-    varying vec3 fNormal, fPosition;
+    varying vec3 fPosition;
+    varying vec4 fNormal;
 
     void main(){
-      vec4 worldPosition = uModelMatrix*vPosition;
+      vec4 viewPosition = uViewMatrix*uModelMatrix*vPosition;
 
-      gl_Position = uViewProjMatrix*worldPosition;
-      fPosition = worldPosition.xyz;
-      fNormal = normalize((uModelMatrix*vNormal).xyz);
+      gl_Position = uProjMatrix*viewPosition;
+      fPosition = viewPosition.xyz;
+      fNormal = vNormal;
     }
   </script>
 
@@ -37,6 +38,10 @@
       vec4 ambient;
       vec4 diffuse;
       vec4 specular;
+      bool enabled;
+      float attenConstant;
+      float attenLinear;
+      float attenExp;
     };
 
     struct Material{
@@ -46,27 +51,57 @@
       float shininess;
     };
         
-    uniform Light uLight;
+    uniform Light uLights[10];
     uniform Material uMaterial;
-    uniform vec4 uCameraPos;
+    uniform mat4 uNormalMatrix;
 
-    varying vec3 fNormal, fPosition;
+    varying vec3 fPosition;
+    varying vec4 fNormal;
+
+
+    vec4 calcPointLight(Light light, vec3 E, vec3 N){
+      vec4 color = light.ambient * uMaterial.ambient;
+      vec3 L;
+      float attenuation = 1.0;
+
+      if (light.position.w == 0.0){
+        L = normalize( light.position.xyz );
+      } else {
+        float distance = length(light.position.xyz - fPosition);
+        L = normalize( light.position.xyz/light.position.w - fPosition );
+        attenuation = light.attenConstant + light.attenLinear*distance + light.attenExp*pow(distance, 2.0);
+      }
+
+      float Kd = dot(L, N);
+      if (Kd > 0.0) {
+        color += Kd * (light.diffuse * uMaterial.diffuse);
+
+        vec3 R = normalize((2.0*N*dot(L,N)) - L);
+        float Ks = dot(E, R);
+        if (Ks > 0.0){
+          Ks =  pow( Ks, uMaterial.shininess );
+          color += Ks * (light.specular * uMaterial.specular);
+        }
+      }
+
+      return color / attenuation;
+    }
+
 
     void main(){
-      vec3 L = normalize( (uLight.position.w == 0.0) ? uLight.position.xyz : uLight.position.xyz/uLight.position.w - fPosition );
-      vec3 N = fNormal;
-      vec3 E = normalize(uCameraPos.xyz - fPosition).xyz;
-      vec3 R = normalize(reflect(L,N));
+      vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+      vec3 N, E;
 
-      vec4 ambient = uLight.ambient * uMaterial.ambient;
+      N = normalize((uNormalMatrix*fNormal).xyz);
+      E = normalize(-fPosition);
 
-      float Kd = max( dot(N,L), 0.0);
-      vec4 diffuse = Kd * (uLight.diffuse * uMaterial.diffuse);
+      for (int i = 0; i < 10; i++){
+        if (uLights[i].enabled){
+          color += calcPointLight(uLights[i], E, N);
+        }
+      }
 
-      float Ks = pow( max( dot(E, R), 0.0), uMaterial.shininess );
-      vec4 specular = Ks * (uLight.specular * uMaterial.specular);
-
-      vec3 finalColor = (ambient+diffuse+specular).xyz;
+      vec3 finalColor = color.xyz;
       gl_FragColor = vec4(finalColor, 1.0);
     }
   </script>
@@ -83,7 +118,7 @@
   <script type="text/javascript" src="js/meshes/monkey.js"></script>
   <script type="text/javascript" src="js/renderer.js"></script>
   <script type="text/javascript" src="js/camera.js"></script>
-  <script type="text/javascript" src="js/light.js"></script>
+  <script type="text/javascript" src="js/light_source.js"></script>
   <script type="text/javascript" src="js/instance.js"></script>
   <script type="text/javascript" src="js/scene.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
@@ -101,8 +136,8 @@
         <label style='vertical-align: top;'>Model: </label>
         <select id='mesh' name='mesh' size=5 onchange='onMeshChange(event);'>
           <option value='cube'> cube </option>
-          <option selected value='torus_flat'> flat torus </option>
-          <option value='torus_smooth'> smooth torus </option>
+          <option value='torus_flat'> flat torus </option>
+          <option selected value='torus_smooth'> smooth torus </option>
           <option value='sphere'> sphere </option>
           <option value='monkey'> monkey </option>
         </select>
