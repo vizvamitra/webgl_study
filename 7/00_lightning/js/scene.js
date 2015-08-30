@@ -27,15 +27,28 @@ Scene.prototype.init = function(){
     }),
 
     new LightSource({
-      position: vec4(2.0, 2.0, 2.0, 1.0),
-      ambient: vec4(0.0, 0.0, 0.0, 1.0),
-      diffuse: vec4(0.4, 0.0, 0.0, 1.0),
-      specular: vec4(0.8, 0.0, 0.0, 1.0),
+      position: vec4(1.5, 1.5, 1.5, 1.0),
+      ambient: vec4(0.2, 0.0, 0.0, 1.0),
+      diffuse: vec4(0.6, 0.0, 0.0, 1.0),
+      specular: vec4(0.9, 0.0, 0.0, 1.0),
       attenuation: {
         constant: 1.0,
-        linear: 0.1,
-        exp: 0.0
+        linear: 0.3,
+        exp: 0.1
       }
+    }),
+
+    new LightSource({
+      position: vec4(0.0, 1.5, 1.5, 1.0),
+      ambient: vec4(0.0, 0.0, 0.2, 1.0),
+      diffuse: vec4(0.0, 0.0, 0.6, 1.0),
+      specular: vec4(0.0, 0.0, 0.9, 1.0),
+      attenuation: {
+        constant: 1.0,
+        linear: 0.3,
+        exp: 0.1
+      },
+      enabled: false
     }),
   ];
 };

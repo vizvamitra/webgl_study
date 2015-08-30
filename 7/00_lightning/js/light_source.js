@@ -14,5 +14,5 @@ window.LightSource = function(options){
     exp: options.attenuation['exp'] || 0.0
   };
 
-  this.enabled = options.enabled || true;
+  this.enabled = (typeof options.enabled == 'undefined') ? true : options.enabled;
 }
