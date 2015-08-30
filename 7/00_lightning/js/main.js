@@ -1,7 +1,7 @@
 var scene, camera, rotation;
 
 rotation = {
-  axis: 1,
+  axis: vec3(0.0, 1.0, 0.0),
   direction: -1,
   speed: 1
 }
@@ -19,22 +19,19 @@ function initScene(){
   var canvas = document.getElementById('gl-canvas');
   camera = new Camera(
     canvas.width / canvas.height,
-    vec4(0.0, 2.0, 4.0, 1.0),
+    vec4(0.0, 3.0, 6.0, 1.0),
     vec3(0.0, -0.5, -1.0),
     vec3(0.0, 1.0, -0.5)
   );
 }
 
 function mainLoop(){
-  scene.instances[0].angles[rotation.axis] += rotation.direction*rotation.speed;
+  for (var i = 1; i < scene.lights.length; i++){
+    scene.lights[i].position = mult(rotate(rotation.direction*rotation.speed, rotation.axis), scene.lights[i].position);
+  }
+
   scene.render(camera);
   requestAnimFrame(mainLoop);
-}
-
-function onMeshChange(event){
-  event.preventDefault();
-  var meshSelect = event.target;
-  scene.instances[0].mesh = meshSelect.value;
 }
 
 function onCheckboxSwitch(event, index){
@@ -43,9 +40,15 @@ function onCheckboxSwitch(event, index){
 }
 
 function onRotationAxisChange(event){
+  var axices = [
+    vec3(1.0, 0.0, 0.0),
+    vec3(0.0, 1.0, 0.0),
+    vec3(0.0, 0.0, 1.0)
+  ];
+
   event.preventDefault();
   var axisSelect = event.target;
-  rotation.axis = parseInt(axisSelect.value);
+  rotation.axis = axices[parseInt(axisSelect.value)];
 }
 
 function onRotationDirectionChange(event){

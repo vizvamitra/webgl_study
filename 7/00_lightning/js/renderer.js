@@ -147,6 +147,8 @@ Renderer.prototype._loadUniforms = function(instance, lights, camera){
       this._gl.uniform1f(this._uniformLocs.lights[i].attenConstant, light.attenuation.constant);
       this._gl.uniform1f(this._uniformLocs.lights[i].attenLinear, light.attenuation.linear);
       this._gl.uniform1f(this._uniformLocs.lights[i].attenExp, light.attenuation.exp);
+    } else {
+      this._gl.uniform1i(this._uniformLocs.lights[i].enabled, 0);
     }
   }
 }

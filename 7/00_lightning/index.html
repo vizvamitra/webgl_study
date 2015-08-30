@@ -132,32 +132,22 @@
     </canvas>
 
     <form class='controls'>
-      <fieldset>
-        <label style='vertical-align: top;'>Model: </label>
-        <select id='mesh' name='mesh' size=5 onchange='onMeshChange(event);'>
-          <option value='cube'> cube </option>
-          <option value='torus_flat'> flat torus </option>
-          <option selected value='torus_smooth'> smooth torus </option>
-          <option value='sphere'> sphere </option>
-          <option value='monkey'> monkey </option>
-        </select>
-      </fieldset>
 
       <fieldset>
         <label>Light sources: </label>
         <input type='checkbox' name='light-0' checked onchange='onCheckboxSwitch(event, 0)'/>
         <input type='checkbox' name='light-1' checked onchange='onCheckboxSwitch(event, 1)'/>
-        <input type='checkbox' name='light-2' onchange='onCheckboxSwitch(event, 2)'/>
+        <input type='checkbox' name='light-2' checked onchange='onCheckboxSwitch(event, 2)'/>
       </fieldset>
 
       <fieldset class='ranges'>
-        <label for='rotationSpeed'>Rotation speed</label>
+        <label for='rotationSpeed'>Lights rotation speed</label>
         <output class='rotationSpeed'>1</output>
         <input type='range' name='rotationSpeed' min=0 max=5 step=0.1 value=1 oninput='onRotationSpeedChange(event)'><br>
       </fieldset>
 
       <fieldset>
-        <label style='vertical-align: top;'>Rotation axis:</label>
+        <label style='vertical-align: top;'>Lights rotation axis:</label>
         <select id='axis' name='axis' size=3 onchange='onRotationAxisChange(event);'>
           <option value='0'> x </option>
           <option selected value='1'> y </option>
