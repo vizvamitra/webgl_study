@@ -1,10 +1,10 @@
-window.Instance = function(mesh, position, angles, scale, wireframe, name){
-  this.mesh = mesh;
+window.Instance = function(options){
+  this.mesh = options.mesh;
 
-  this.name = name || mesh;
-  this.angles = angles || vec3(0, 0, 0);
-  this.position = position || vec3(0.0, 0.0, 0.0);
-  this.scale = scale || vec3(1.0, 1.0, 1.0);
+  this.name = options.name || mesh;
+  this.angles = options.angles || vec3(0, 0, 0);
+  this.position = options.position || vec3(0.0, 0.0, 0.0);
+  this.scale = options.scale || vec3(1.0, 1.0, 1.0);
 };
 
 Instance.prototype.modelMatrix = function(){

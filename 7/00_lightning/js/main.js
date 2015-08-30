@@ -33,13 +33,18 @@ function mainLoop(){
 
 function onMeshChange(event){
   event.preventDefault();
-  meshSelect = event.target;
+  var meshSelect = event.target;
   scene.instances[0].mesh = meshSelect.value;
+}
+
+function onCheckboxSwitch(event, index){
+  var checkbox = event.target;
+  scene.lights[index].enabled = checkbox.checked;
 }
 
 function onRotationAxisChange(event){
   event.preventDefault();
-  axisSelect = event.target;
+  var axisSelect = event.target;
   rotation.axis = parseInt(axisSelect.value);
 }
 
@@ -49,10 +54,10 @@ function onRotationDirectionChange(event){
 }
 
 function onRotationSpeedChange(evt, model){
-  input = evt.target;
+  var input = evt.target;
 
   rotation.speed = parseFloat(input.value);
 
-  output = input.parentNode.getElementsByClassName('rotationSpeed')[0];
+  var output = input.parentNode.getElementsByClassName('rotationSpeed')[0];
   output.innerHTML = input.value;
 }
