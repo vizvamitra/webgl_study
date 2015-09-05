@@ -35,8 +35,8 @@ EventsEngine.prototype._onMouseMove = function(event){
     if(camera.angles.horisontal < -180) camera.angles.horisontal = -180;
 
     camera.angles.vertical = this.oldAngles.vertical - mouseVec[1]/2;
-    if(camera.angles.vertical > 90) camera.angles.vertical = 90;
-    if(camera.angles.vertical < -90) camera.angles.vertical = -90;
+    if(camera.angles.vertical > 89) camera.angles.vertical = 89;
+    if(camera.angles.vertical < -89) camera.angles.vertical = -89;
   }
 };
 
