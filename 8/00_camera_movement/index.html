@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - Lightning</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    struct Light{
+      vec4 position;
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
+    };
+
+    attribute vec4 vPosition;
+    attribute vec4 vNormal;
+    
+    uniform mat4 uModelMatrix;
+    uniform mat4 uViewMatrix;
+    uniform mat4 uProjMatrix;
+
+    varying vec3 fPosition;
+    varying vec4 fNormal;
+
+    void main(){
+      vec4 viewPosition = uViewMatrix*uModelMatrix*vPosition;
+
+      gl_Position = uProjMatrix*viewPosition;
+      fPosition = viewPosition.xyz;
+      fNormal = vNormal;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+
+    struct Light{
+      vec4 position;
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
+      bool enabled;
+      float attenConstant;
+      float attenLinear;
+      float attenExp;
+    };
+
+    struct Material{
+      vec4 ambient;
+      vec4 diffuse;
+      vec4 specular;
+      float shininess;
+    };
+        
+    uniform Light uLights[10];
+    uniform Material uMaterial;
+    uniform mat4 uNormalMatrix;
+
+    varying vec3 fPosition;
+    varying vec4 fNormal;
+
+
+    vec4 calcPointLight(Light light, vec3 E, vec3 N){
+      vec4 color = light.ambient * uMaterial.ambient;
+      vec3 L;
+      float attenuation = 1.0;
+
+      if (light.position.w == 0.0){
+        L = normalize( light.position.xyz );
+      } else {
+        float distance = length(light.position.xyz - fPosition);
+        L = normalize( light.position.xyz/light.position.w - fPosition );
+        attenuation = light.attenConstant + light.attenLinear*distance + light.attenExp*pow(distance, 2.0);
+      }
+
+      float Kd = dot(L, N);
+      if (Kd > 0.0) {
+        color += Kd * (light.diffuse * uMaterial.diffuse);
+
+        vec3 R = normalize((2.0*N*dot(L,N)) - L);
+        float Ks = dot(E, R);
+        if (Ks > 0.0){
+          Ks =  pow( Ks, uMaterial.shininess );
+          color += Ks * (light.specular * uMaterial.specular);
+        }
+      }
+
+      return color / attenuation;
+    }
+
+
+    void main(){
+      vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+      vec3 N, E;
+
+      N = normalize((uNormalMatrix*fNormal).xyz);
+      E = normalize(-fPosition);
+
+      for (int i = 0; i < 10; i++){
+        if (uLights[i].enabled){
+          color += calcPointLight(uLights[i], E, N);
+        }
+      }
+
+      vec3 finalColor = color.xyz;
+      gl_FragColor = vec4(finalColor, 1.0);
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/meshes/cube.js"></script>
+  <script type="text/javascript" src="js/meshes/sphere.js"></script>
+  <script type="text/javascript" src="js/meshes/torus_flat.js"></script>
+  <script type="text/javascript" src="js/meshes/torus_smooth.js"></script>
+  <script type="text/javascript" src="js/meshes/monkey.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/quaternion.js"></script>
+  <script type="text/javascript" src="js/events_engine.js"></script>
+  <script type="text/javascript" src="js/camera.js"></script>
+  <script type="text/javascript" src="js/light_source.js"></script>
+  <script type="text/javascript" src="js/instance.js"></script>
+  <script type="text/javascript" src="js/scene.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/7/00_lightning'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas' width=300 height=300>
+      Canvas is not supported by your browser...
+    </canvas>
+
+    <form class='controls'>
+
+      <fieldset>
+        <label>Light sources: </label>
+        <input type='checkbox' name='light-0' checked onchange='onCheckboxSwitch(event, 0)'/>
+        <input type='checkbox' name='light-1' checked onchange='onCheckboxSwitch(event, 1)'/>
+        <input type='checkbox' name='light-2' checked onchange='onCheckboxSwitch(event, 2)'/>
+      </fieldset>
+
+      <fieldset class='ranges'>
+        <label for='rotationSpeed'>Lights rotation speed</label>
+        <output class='rotationSpeed'>1</output>
+        <input type='range' name='rotationSpeed' min=0 max=5 step=0.1 value=1 oninput='onRotationSpeedChange(event)'><br>
+      </fieldset>
+
+      <fieldset>
+        <label style='vertical-align: top;'>Lights rotation axis:</label>
+        <select id='axis' name='axis' size=3 onchange='onRotationAxisChange(event);'>
+          <option value='0'> x </option>
+          <option selected value='1'> y </option>
+          <option value='2'> z </option>
+        </select><br><br>
+
+        <button onclick='onRotationDirectionChange(event);'>Change rotation direction</button>
+      </fieldset>
+    </form>
+
+  </div>
+
+  <div id='info'>
+    <p>Image is rotatable with mouse</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+body{
+  text-align: center;
+}
+
+.container{
+  margin: auto;
+  width: 650px;
+  overflow: auto;
+}
+
+canvas{
+  border: 1px solid #333;
+  display: block;
+  float: left;
+  cursor: default;
+}
+
+.controls{ 
+  width: 348px;
+  float: left;
+  text-align: left;
+}
+  
+fieldset{
+  border: none;
+}
+
+.ranges input{float: right;}
+
+.ranges output{
+  float: right;
+  width: 40px;
+}
+
+label{
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+#info{margin-top: 30px;}
+#info p{
+  margin: 10px 0;
+  color: #666;
+}

@@ -723,6 +723,22 @@ function inverse(M){
     return I;
 }
 
+function rotateVec(vec, axis, angle){
+    var sinHalfAngle = Math.sin(radians(angle/2));
+    var cosHalfAngle = Math.cos(radians(angle/2));
+    
+    var Qx = axis[0] * sinHalfAngle;
+    var Qy = axis[1]* sinHalfAngle;
+    var Qz = axis[2] * sinHalfAngle;
+    var Qw = cosHalfAngle;
+    
+    var rotation = new Quaternion(vec4(Qx, Qy, Qz, Qw));
+    var inverse = rotation.inverse();
+    
+    var result = rotation.mult(vec).mult(inverse);
+    return vec3(result.x, result.y, result.z);
+}
+
 
 //----------------------------------------------------------------------------
 
