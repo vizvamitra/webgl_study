@@ -5,7 +5,6 @@ window.EventsEngine = function(canvasId){
   this._buttons = {
     left: false
   };
-
 }
 
 EventsEngine.prototype.init = function(canvasId){
