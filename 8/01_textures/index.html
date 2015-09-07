@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WebGL - Camera movement</title>
+  <title>WebGL - Textures</title>
 
   <script id="vertex-shader" type="x-shader/x-vertex">
     struct Light{
@@ -13,6 +13,7 @@
 
     attribute vec4 vPosition;
     attribute vec4 vNormal;
+    attribute vec2 vTexCoord;
     
     uniform mat4 uModelMatrix;
     uniform mat4 uViewMatrix;
@@ -20,6 +21,7 @@
 
     varying vec3 fPosition;
     varying vec4 fNormal;
+    varying vec2 fTexCoord;
 
     void main(){
       vec4 viewPosition = uViewMatrix*uModelMatrix*vPosition;
@@ -27,6 +29,7 @@
       gl_Position = uProjMatrix*viewPosition;
       fPosition = viewPosition.xyz;
       fNormal = vNormal;
+      fTexCoord = vTexCoord;
     }
   </script>
 
@@ -54,9 +57,11 @@
     uniform Light uLights[10];
     uniform Material uMaterial;
     uniform mat4 uNormalMatrix;
+    uniform sampler2D uTextureId;
 
     varying vec3 fPosition;
     varying vec4 fNormal;
+    varying vec2 fTexCoord;
 
 
     vec4 calcPointLight(Light light, vec3 E, vec3 N){
@@ -101,8 +106,8 @@
         }
       }
 
-      vec3 finalColor = color.xyz;
-      gl_FragColor = vec4(finalColor, 1.0);
+      vec4 finalColor = vec4(color.xyz, 1.0);
+      gl_FragColor = texture2D(uTextureId, fTexCoord) * finalColor;
     }
   </script>
 
@@ -113,10 +118,9 @@
   <script type="text/javascript" src="../../common/mv.js"></script>
   <script type="text/javascript" src="js/meshes/cube.js"></script>
   <script type="text/javascript" src="js/meshes/sphere.js"></script>
-  <script type="text/javascript" src="js/meshes/torus_flat.js"></script>
-  <script type="text/javascript" src="js/meshes/torus_smooth.js"></script>
-  <script type="text/javascript" src="js/meshes/monkey.js"></script>
   <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/mesh.js"></script>
+  <script type="text/javascript" src="js/texture.js"></script>
   <script type="text/javascript" src="js/quaternion.js"></script>
   <script type="text/javascript" src="js/events_engine.js"></script>
   <script type="text/javascript" src="js/camera.js"></script>
@@ -126,7 +130,7 @@
   <script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
-  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/8/00_camera_movement'>Github</a><br><br>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/8/01_textures'>Github</a><br><br>
 
   <div class='container'>
     <canvas id='gl-canvas' width=300 height=300>

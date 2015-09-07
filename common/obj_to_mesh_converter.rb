@@ -11,25 +11,30 @@ class ObjToMeshConverter
     @mesh_classname = mesh_classname
     @vertices = []
     @normals = []
+    @uvs = []
     @material = Struct.new(:ns, :ka, :kd, :ks).new
   end
 
   def parse
-    temp_vertices, temp_normals = [], []
+    temp_vertices, temp_normals, temp_uvs = [], [], []
     File.open(@input_filename, 'r') do |file|
       file.each_line do |line|
         if line =~ /\Av ([-\d.]+) ([-\d.]+) ([-\d.]+)\n\z/
           temp_vertices << [$1, $2, $3]
         elsif line =~ /\Avn ([-\d.]+) ([-\d.]+) ([-\d.]+)\n\z/
           temp_normals << [$1, $2, $3]
+        elsif line =~ /\Avt ([\d.]+) ([\d.]+)\n\z/
+          temp_uvs << [$1, $2]
         elsif line =~ /\Amtllib (.*)\n\z/
           parse_material($1);
         elsif line =~ /\Af [\d\/\s]+\n\z/
           line.strip.split(' ')[1..3].map do |index|
             vi = index[/\A\d+/].to_i - 1
+            ti = index[/(?<=\/)\d+(?=\/)/].to_i - 1
             ni = index[/(?<=\/)\d+\z/].to_i - 1
             @vertices << temp_vertices[vi]
             @normals << temp_normals[ni]
+            @uvs << temp_uvs[ti]
           end
         end
       end
@@ -58,6 +63,12 @@ class ObjToMeshConverter
       file << "  this.normals = [\n"
       @normals.each do |vec|
         file << "    vec3(#{vec[0]}, #{vec[1]}, #{vec[2]}),\n"
+      end
+      file << "  ];\n\n"
+
+      file << "  this.texCoords = [\n"
+      @uvs.each do |vec|
+        file << "    vec2(#{vec[0]}, #{vec[1]}),\n"
       end
       file << "  ];\n\n"
 
