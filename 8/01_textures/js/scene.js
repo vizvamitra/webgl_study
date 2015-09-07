@@ -9,18 +9,18 @@ Scene.prototype.init = function(){
   this.renderer.init();
   this.instances = [
     new Instance({
-      mesh: 'cube',
+      mesh: 'sphere',
     }),
   ];
 
   this.lights = [
     new LightSource({
       position: vec4(-2.0, 2.0, 2.0, 0.0),
-      ambient: vec4(0.5, 0.5, 0.5, 1.0),
+      ambient: vec4(0.6, 0.6, 0.6, 1.0),
       diffuse: vec4(1.5, 1.5, 1.5, 1.0),
       specular: vec4(1.0, 1.0, 1.0, 1.0),
       attenuation: {
-        constant: 1.0,
+        constant: 0.0,
         linear: 0.0,
         exp: 0.0
       }
@@ -28,21 +28,21 @@ Scene.prototype.init = function(){
 
     new LightSource({
       position: vec4(2.0, 2.0, 2.0, 1.0),
-      ambient: vec4(0.5, 0.0, 0.0, 1.0),
+      ambient: vec4(0.2, 0.0, 0.0, 1.0),
       diffuse: vec4(1.5, 0.0, 0.0, 1.0),
       specular: vec4(1.0, 0.0, 0.0, 1.0),
       attenuation: {
         constant: 1.0,
-        linear: 0.2,
-        exp: 0.05
+        linear: 0.3,
+        exp: 0.08
       }
     }),
 
     new LightSource({
       position: vec4(-2.0, 2.0, 2.0, 1.0),
-      ambient: vec4(0.0, 0.5, 0.0, 1.0),
-      diffuse: vec4(0.0, 1.5, 0.0, 1.0),
-      specular: vec4(0.0, 1.0, 0.0, 1.0),
+      ambient: vec4(0.0, 0.0, 0.6, 1.0),
+      diffuse: vec4(0.0, 0.0, 1.5, 1.0),
+      specular: vec4(0.0, 0.0, 1.0, 1.0),
       attenuation: {
         constant: 1.0,
         linear: 0.2,
@@ -66,7 +66,7 @@ Scene.prototype.render = function(camera){
 
     this.renderer.render(
       new Instance({
-        mesh: 'sphere',
+        mesh: 'light',
         position: light.position,
         scale: vec3(0.08, 0.08, 0.08)
       }),

@@ -6,11 +6,13 @@ window.Renderer = function(canvasId){
 
   this._meshes = {
     cube: new Mesh(new Cube()),
-    sphere: new Mesh(new Sphere())
+    sphere: new Mesh(new Sphere()),
+    light: new Mesh(new Sphere())
   };
 
   this._textures = {
     cube: new Texture('cube.png'),
+    sphere: new Texture('sphere.jpg'),
   };
 
   this._vPosition = undefined;
@@ -31,6 +33,7 @@ window.Renderer = function(canvasId){
       shininess: undefined
     },
     textureId: undefined,
+    textureEnabled: undefined
   }
 }
 
@@ -85,6 +88,7 @@ Renderer.prototype._initUniformLocations = function(){
   this._uniformLocs.projMatrix = this._gl.getUniformLocation(this._program, 'uProjMatrix');
   this._uniformLocs.normalMatrix = this._gl.getUniformLocation(this._program, 'uNormalMatrix');
   this._uniformLocs.textureId = this._gl.getUniformLocation(this._program, 'uTextureId');
+  this._uniformLocs.textureEnabled = this._gl.getUniformLocation(this._program, 'uTextureEnabled');
 
   for (var i=0; i<10; i++){
     this._uniformLocs.lights.push({
@@ -147,5 +151,10 @@ Renderer.prototype._loadUniforms = function(instance, lights, camera, texture){
     }
   }
 
-  if (texture) { this._gl.uniform1i(this._uniformLocs.textureId, texture.id); }
+  if (texture) {
+    this._gl.uniform1i(this._uniformLocs.textureEnabled, 1);
+    this._gl.uniform1i(this._uniformLocs.textureId, texture.id);
+  } else {
+    this._gl.uniform1i(this._uniformLocs.textureEnabled, 0);
+  }
 }

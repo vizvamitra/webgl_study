@@ -22,14 +22,14 @@ function initScene(){
   var canvas = document.getElementById('gl-canvas');
   camera = new Camera();
   camera.setPerspective(canvas.width / canvas.height);
-  camera.distance = 4;
+  camera.distance = 3;
   camera.angles.vertical = -20;
   camera.angles.horisontal = 0;
   camera.update();
 }
 
 function mainLoop(){
-  for (var i = 1; i < scene.lights.length; i++){
+  for (var i = 0; i < scene.lights.length; i++){
     scene.lights[i].position = mult(rotate(rotation.direction*rotation.speed, rotation.axis), scene.lights[i].position);
   }
 

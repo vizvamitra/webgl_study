@@ -58,6 +58,7 @@
     uniform Material uMaterial;
     uniform mat4 uNormalMatrix;
     uniform sampler2D uTextureId;
+    uniform bool uTextureEnabled;
 
     varying vec3 fPosition;
     varying vec4 fNormal;
@@ -107,7 +108,8 @@
       }
 
       vec4 finalColor = vec4(color.xyz, 1.0);
-      gl_FragColor = texture2D(uTextureId, fTexCoord) * finalColor;
+      if (uTextureEnabled){ finalColor *= texture2D(uTextureId, fTexCoord); }
+      gl_FragColor = finalColor;
     }
   </script>
 

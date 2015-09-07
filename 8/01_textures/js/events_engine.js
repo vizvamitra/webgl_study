@@ -30,8 +30,6 @@ EventsEngine.prototype._onMouseMove = function(event){
     var mouseVec = subtract(this.endMousePos, this.startMousePos);
 
     camera.angles.horisontal = this.oldAngles.horisontal - mouseVec[0]/2;
-    if(camera.angles.horisontal > 180) camera.angles.horisontal = 180;
-    if(camera.angles.horisontal < -180) camera.angles.horisontal = -180;
 
     camera.angles.vertical = this.oldAngles.vertical - mouseVec[1]/2;
     if(camera.angles.vertical > 89) camera.angles.vertical = 89;
@@ -59,8 +57,8 @@ EventsEngine.prototype._onMouseDown = function(event){
 
 EventsEngine.prototype._onMouseWheel = function(event){
   camera.distance += event.deltaY/100
-  if(camera.distance > 15) camera.distance = 15
-  if(camera.distance < 4.5) camera.distance = 4.5
+  if(camera.distance > 10) camera.distance = 10
+  if(camera.distance < 2) camera.distance = 2
 }
 
 EventsEngine.prototype._getMousePos = function(clientX, clientY){
