@@ -4,9 +4,9 @@ window.Sphere = function(){
 
   this.material = {
     ambient: vec4(0.5, 0.5, 0.5, 1.0),
-    diffuse: vec4(1.0, 1.0, 1.0, 1.0),
+    diffuse: vec4(1.5, 1.5, 1.5, 1.0),
     specular: vec4(1.0, 1.0, 1.0, 1.0),
-    shininess: 50
+    shininess: 10
   };
 
   this.vertices = [

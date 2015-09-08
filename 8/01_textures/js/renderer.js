@@ -7,12 +7,14 @@ window.Renderer = function(canvasId){
   this._meshes = {
     cube: new Mesh(new Cube()),
     sphere: new Mesh(new Sphere()),
-    light: new Mesh(new Sphere())
+    light: new Mesh(new Sphere()),
+    skybox: new Mesh(new Skybox()),
   };
 
   this._textures = {
     cube: new Texture('cube.png'),
     sphere: new Texture('sphere.jpg'),
+    skybox: new Texture('skybox.png'),
   };
 
   this._vPosition = undefined;

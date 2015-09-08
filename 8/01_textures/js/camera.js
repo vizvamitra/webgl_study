@@ -27,7 +27,7 @@ Camera.prototype.update = function(){
   this._target = normalize(newTarget);
   this._up = normalize(cross(axisH, this._target));
 
-  this._position = vec3(-this._target[0]*this.distance, -this._target[1]*this.distance, -this._target[2]*this.distance);
+  this.position = vec3(-this._target[0]*this.distance, -this._target[1]*this.distance, -this._target[2]*this.distance);
 }
 
 Camera.prototype.viewMatrix = function(){
@@ -36,9 +36,9 @@ Camera.prototype.viewMatrix = function(){
   var u = normalize(cross(n, v));
 
   var t = mat4(
-    1.0, 0.0, 0.0, -this._position[0],
-    0.0, 1.0, 0.0, -this._position[1],
-    0.0, 0.0, 1.0, -this._position[2],
+    1.0, 0.0, 0.0, -this.position[0],
+    0.0, 1.0, 0.0, -this.position[1],
+    0.0, 0.0, 1.0, -this.position[2],
     0.0, 0.0, 0.0,    1.0
   );
 

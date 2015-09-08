@@ -31,9 +31,9 @@ EventsEngine.prototype._onMouseMove = function(event){
 
     camera.angles.horisontal = this.oldAngles.horisontal - mouseVec[0]/2;
 
-    camera.angles.vertical = this.oldAngles.vertical - mouseVec[1]/2;
-    if(camera.angles.vertical > 89) camera.angles.vertical = 89;
-    if(camera.angles.vertical < -89) camera.angles.vertical = -89;
+    // camera.angles.vertical = this.oldAngles.vertical - mouseVec[1]/2;
+    // if(camera.angles.vertical > 89) camera.angles.vertical = 89;
+    // if(camera.angles.vertical < -89) camera.angles.vertical = -89;
   }
 };
 
@@ -56,9 +56,10 @@ EventsEngine.prototype._onMouseDown = function(event){
 };
 
 EventsEngine.prototype._onMouseWheel = function(event){
-  camera.distance += event.deltaY/100
-  if(camera.distance > 10) camera.distance = 10
-  if(camera.distance < 2) camera.distance = 2
+  event.preventDefault();
+  camera.distance += event.deltaY/100;
+  if(camera.distance > 5) camera.distance = 5;
+  if(camera.distance < 2) camera.distance = 2;
 }
 
 EventsEngine.prototype._getMousePos = function(clientX, clientY){

@@ -23,7 +23,7 @@ class ObjToMeshConverter
           temp_vertices << [$1, $2, $3]
         elsif line =~ /\Avn ([-\d.]+) ([-\d.]+) ([-\d.]+)\n\z/
           temp_normals << [$1, $2, $3]
-        elsif line =~ /\Avt ([\d.]+) ([\d.]+)\n\z/
+        elsif line =~ /\Avt ([-\d.]+) ([-\d.]+)\n\z/
           temp_uvs << [$1, $2]
         elsif line =~ /\Amtllib (.*)\n\z/
           parse_material($1);

@@ -10,12 +10,13 @@ Scene.prototype.init = function(){
   this.instances = [
     new Instance({
       mesh: 'sphere',
+      angles: vec3(0.0, 0.0, -23.439281)
     }),
   ];
 
   this.lights = [
     new LightSource({
-      position: vec4(-2.0, 2.0, 2.0, 0.0),
+      position: vec4(0.0, 0.0, 1.0, 0.0),
       ambient: vec4(0.6, 0.6, 0.6, 1.0),
       diffuse: vec4(1.5, 1.5, 1.5, 1.0),
       specular: vec4(1.0, 1.0, 1.0, 1.0),
@@ -24,31 +25,7 @@ Scene.prototype.init = function(){
         linear: 0.0,
         exp: 0.0
       }
-    }),
-
-    new LightSource({
-      position: vec4(2.0, 2.0, 2.0, 1.0),
-      ambient: vec4(0.2, 0.0, 0.0, 1.0),
-      diffuse: vec4(1.5, 0.0, 0.0, 1.0),
-      specular: vec4(1.0, 0.0, 0.0, 1.0),
-      attenuation: {
-        constant: 1.0,
-        linear: 0.3,
-        exp: 0.08
-      }
-    }),
-
-    new LightSource({
-      position: vec4(-2.0, 2.0, 2.0, 1.0),
-      ambient: vec4(0.0, 0.0, 0.6, 1.0),
-      diffuse: vec4(0.0, 0.0, 1.5, 1.0),
-      specular: vec4(0.0, 0.0, 1.0, 1.0),
-      attenuation: {
-        constant: 1.0,
-        linear: 0.2,
-        exp: 0.05
-      },
-    }),
+    })
   ];
 };
 
@@ -59,26 +36,19 @@ Scene.prototype.render = function(camera){
 
   for(var i in this.instances){ this.renderer.render(this.instances[i], this.lights, camera); }
 
-  // render lights
-  for(var i in this.lights){
-    var light = this.lights[i];
-    if (!light.enabled || light.position[3] == 0) continue;
-
-    this.renderer.render(
-      new Instance({
-        mesh: 'light',
-        position: light.position,
-        scale: vec3(0.08, 0.08, 0.08)
-      }),
-      [
-        new LightSource({
-          position: vec4(0.0, 0.0, 1.0, 0.0),
-          ambient: scale(2, light.specular),
-          diffuse: scale(2, light.specular),
-          enabled: true
-        }),
-      ],
-      camera
-    );
-  }
+  // render skybox
+  this.renderer.render(
+    new Instance({
+      mesh: 'skybox',
+      position: camera.position,
+      scale: vec3(100, 100, 100)
+    }),
+    [
+      new LightSource({
+        ambient: vec4(1.0, 1.0, 1.0, 1.0),
+        enabled: true
+      })
+    ],
+    camera
+  );
 };
