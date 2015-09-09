@@ -6,7 +6,7 @@ window.Renderer = function(canvasId){
 
   this._meshes = {
     cube: new Mesh(new Cube(), new Texture('cube.png')),
-    sphere: new Mesh(new Sphere(), new Texture('sphere.jpg'), new Texture('earth_normalmap_2.jpg', 1)),
+    sphere: new Mesh(new Sphere(), new Texture('sphere.jpg'), new Texture('earth_normalmap_2.jpg', 1), new Texture('earth_specularmap.jpg', 2)),
     skybox: new Mesh(new Skybox(), new Texture('skybox.jpg')),
   };
 
@@ -32,7 +32,9 @@ window.Renderer = function(canvasId){
     textureId: undefined,
     textureEnabled: undefined,
     normalMapId: undefined,
-    normalMapEnabled: undefined
+    normalMapEnabled: undefined,
+    specularMapId: undefined,
+    specularMapEnabled: undefined
   }
 }
 
@@ -46,7 +48,7 @@ Renderer.prototype.render = function(instance, light, camera){
   var mesh = this._meshes[instance.mesh];
   mesh.bind();
 
-  this._loadUniforms(instance, light, camera, mesh.texture, mesh.normalMap);
+  this._loadUniforms(instance, light, camera, mesh);
 
   this._gl.drawArrays( this._gl.TRIANGLES, 0, mesh.numVertices );
 }
@@ -88,6 +90,8 @@ Renderer.prototype._initUniformLocations = function(){
   this._uniformLocs.textureEnabled = this._gl.getUniformLocation(this._program, 'uTextureEnabled');
   this._uniformLocs.normalMapId = this._gl.getUniformLocation(this._program, 'uNormalMapId');
   this._uniformLocs.normalMapEnabled = this._gl.getUniformLocation(this._program, 'uNormalMapEnabled');
+  this._uniformLocs.specularMapId = this._gl.getUniformLocation(this._program, 'uSpecularMapId');
+  this._uniformLocs.specularMapEnabled = this._gl.getUniformLocation(this._program, 'uSpecularMapEnabled');
 
   for (var i=0; i<10; i++){
     this._uniformLocs.lights.push({
@@ -114,7 +118,7 @@ Renderer.prototype._initMeshes = function(){
   }
 }
 
-Renderer.prototype._loadUniforms = function(instance, lights, camera, texture, normalMap){
+Renderer.prototype._loadUniforms = function(instance, lights, camera, mesh, options){
   this._gl.uniformMatrix4fv(this._uniformLocs.modelMatrix, false, flatten(instance.modelMatrix()));
 
   var normalMatrix = inverse(mult(camera.viewMatrix(), instance.modelMatrix()));
@@ -144,17 +148,24 @@ Renderer.prototype._loadUniforms = function(instance, lights, camera, texture, n
     }
   }
 
-  if (texture) {
+  if (mesh.texture && settings.colorMapping) {
     this._gl.uniform1i(this._uniformLocs.textureEnabled, 1);
     this._gl.uniform1i(this._uniformLocs.textureId, 0);
   } else {
     this._gl.uniform1i(this._uniformLocs.textureEnabled, 0);
   }
 
-  if (normalMap && settings.normalMapping) {
+  if (mesh.normalMap && settings.normalMapping) {
     this._gl.uniform1i(this._uniformLocs.normalMapEnabled, 1);
     this._gl.uniform1i(this._uniformLocs.normalMapId, 1);
   } else {
     this._gl.uniform1i(this._uniformLocs.normalMapEnabled, 0);
+  }
+
+  if (mesh.specularMap && settings.specularMapping) {
+    this._gl.uniform1i(this._uniformLocs.specularMapEnabled, 1);
+    this._gl.uniform1i(this._uniformLocs.specularMapId, 2);
+  } else {
+    this._gl.uniform1i(this._uniformLocs.specularMapEnabled, 0);
   }
 }

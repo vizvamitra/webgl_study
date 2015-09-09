@@ -62,11 +62,13 @@
         
     uniform Light uLights[10];
     uniform Material uMaterial;
+    uniform mat4 uNormalMatrix;
     uniform sampler2D uTextureId;
     uniform bool uTextureEnabled;
     uniform sampler2D uNormalMapId;
     uniform bool uNormalMapEnabled;
-    uniform mat4 uNormalMatrix;
+    uniform sampler2D uSpecularMapId;
+    uniform bool uSpecularMapEnabled;
 
     varying vec3 fPosition;
     varying vec2 fTexCoord;
@@ -94,8 +96,14 @@
 
         vec3 R = normalize((2.0*N*dot(L,N)) - L);
         float Ks = dot(E, R);
+        float shininess;
         if (Ks > 0.0){
-          Ks =  pow( Ks, uMaterial.shininess );
+          if (uSpecularMapEnabled) {
+            shininess = texture2D(uSpecularMapId, fTexCoord).r * 255.0;
+          } else {
+            shininess = uMaterial.shininess;
+          }
+          Ks = pow( Ks, shininess );
           color += Ks * (light.specular * uMaterial.specular);
         }
       }
@@ -172,8 +180,12 @@
     <form class='controls'>
 
       <fieldset>
-        <label>Normal mapping: </label>
+        <label>Use color map: </label>
+        <input type='checkbox' name='colorMapping' checked onchange='onCheckboxSwitch(event)'/><br/>
+        <label>Use normal map: </label>
         <input type='checkbox' name='normalMapping' checked onchange='onCheckboxSwitch(event)'/><br/>
+        <label>Use specular map: </label>
+        <input type='checkbox' name='specularMapping' checked onchange='onCheckboxSwitch(event)'/><br/>
         <label>Rotation: </label>
         <input type='checkbox' name='rotation' checked onchange='onCheckboxSwitch(event)'/>
       </fieldset>

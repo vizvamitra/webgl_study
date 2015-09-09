@@ -18,8 +18,8 @@ Scene.prototype.init = function(){
     new LightSource({
       position: vec4(0.0, 0.0, 1.0, 0.0),
       ambient: vec4(0.5, 0.5, 0.5, 1.0),
-      diffuse: vec4(1.5, 1.5, 1.5, 1.0),
-      specular: vec4(0.7, 0.7, 0.7, 1.0)
+      diffuse: vec4(1.3, 1.3, 1.3, 1.0),
+      specular: vec4(1.5, 1.5, 1.5, 1.0)
     })
   ];
 };
@@ -32,6 +32,8 @@ Scene.prototype.render = function(camera){
   for(var i in this.instances){ this.renderer.render(this.instances[i], this.lights, camera); }
 
   // render skybox
+  var oldColorMapping = settings.colorMapping;
+  settings.colorMapping = true;
   this.renderer.render(
     new Instance({
       mesh: 'skybox',
@@ -46,4 +48,5 @@ Scene.prototype.render = function(camera){
     ],
     camera
   );
+  settings.colorMapping = oldColorMapping;
 };

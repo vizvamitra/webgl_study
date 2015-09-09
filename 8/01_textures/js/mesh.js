@@ -1,7 +1,8 @@
-window.Mesh = function(dataObject, texture, normalMap){
+window.Mesh = function(dataObject, texture, normalMap, specularMap){
   this.dataObject = dataObject;
   this.texture = texture;
   this.normalMap = normalMap;
+  this.specularMap = specularMap;
 
   this.numVertices = this.dataObject.vertices.length;
 
@@ -22,6 +23,7 @@ Mesh.prototype.init = function(gl, vPosition, vNormal, vTexCoord, vTangent, vBit
 
   if(this.texture) this.texture.init(this._gl);
   if(this.normalMap) this.normalMap.init(this._gl);
+  if(this.specularMap) this.specularMap.init(this._gl);
 
   this._vBufferId = this._gl.createBuffer();
   this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._vBufferId );
@@ -63,6 +65,7 @@ Mesh.prototype.init = function(gl, vPosition, vNormal, vTexCoord, vTangent, vBit
 Mesh.prototype.bind = function(){
   if (this.texture) this.texture.bind();
   if (this.normalMap) this.normalMap.bind();
+  if (this.specularMap) this.specularMap.bind();
 
   this._gl.bindBuffer( this._gl.ARRAY_BUFFER, this._vBufferId );
   this._gl.vertexAttribPointer( this._vPosition, 3, this._gl.FLOAT, false, 0, 0 );

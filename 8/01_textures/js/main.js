@@ -1,7 +1,9 @@
 var scene, camera, events, rotation, settings;
 
 settings = {
+  colorMapping: true,
   normalMapping: true,
+  specularMapping: true,
   rotation: true,
   rotationSpeed: 0.2
 }
