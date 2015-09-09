@@ -5,21 +5,16 @@ window.Renderer = function(canvasId){
   this._program = undefined;
 
   this._meshes = {
-    cube: new Mesh(new Cube()),
-    sphere: new Mesh(new Sphere()),
-    light: new Mesh(new Sphere()),
-    skybox: new Mesh(new Skybox()),
-  };
-
-  this._textures = {
-    cube: new Texture('cube.png'),
-    sphere: new Texture('sphere.jpg'),
-    skybox: new Texture('skybox.png'),
+    cube: new Mesh(new Cube(), new Texture('cube.png')),
+    sphere: new Mesh(new Sphere(), new Texture('sphere.jpg'), new Texture('earth_normalmap_2.jpg', 1)),
+    skybox: new Mesh(new Skybox(), new Texture('skybox.jpg')),
   };
 
   this._vPosition = undefined;
   this._vNormal = undefined;
   this._vTexCoord = undefined;
+  this._vTangent = undefined;
+  this._vBirangent = undefined;
 
   this._uniformLocs = {
     modelMatrix: undefined,
@@ -35,7 +30,9 @@ window.Renderer = function(canvasId){
       shininess: undefined
     },
     textureId: undefined,
-    textureEnabled: undefined
+    textureEnabled: undefined,
+    normalMapId: undefined,
+    normalMapEnabled: undefined
   }
 }
 
@@ -43,17 +40,13 @@ Renderer.prototype.init = function(){
   this._initGL();
   this._initUniformLocations();
   this._initMeshes();
-  this._initTextures();
 }
 
 Renderer.prototype.render = function(instance, light, camera){
   var mesh = this._meshes[instance.mesh];
   mesh.bind();
 
-  var texture = this._textures[instance.mesh];
-  if (texture) texture.bind();
-
-  this._loadUniforms(instance, light, camera, texture);
+  this._loadUniforms(instance, light, camera, mesh.texture, mesh.normalMap);
 
   this._gl.drawArrays( this._gl.TRIANGLES, 0, mesh.numVertices );
 }
@@ -82,6 +75,8 @@ Renderer.prototype._initGL = function(){
   this._vPosition = this._gl.getAttribLocation( this._program, "vPosition" );
   this._vNormal = this._gl.getAttribLocation( this._program, "vNormal" );
   this._vTexCoord = this._gl.getAttribLocation( this._program, "vTexCoord" );
+  this._vTangent = this._gl.getAttribLocation( this._program, "vTangent" );
+  this._vBitangent = this._gl.getAttribLocation( this._program, "vBitangent" );
 }
 
 Renderer.prototype._initUniformLocations = function(){
@@ -91,6 +86,8 @@ Renderer.prototype._initUniformLocations = function(){
   this._uniformLocs.normalMatrix = this._gl.getUniformLocation(this._program, 'uNormalMatrix');
   this._uniformLocs.textureId = this._gl.getUniformLocation(this._program, 'uTextureId');
   this._uniformLocs.textureEnabled = this._gl.getUniformLocation(this._program, 'uTextureEnabled');
+  this._uniformLocs.normalMapId = this._gl.getUniformLocation(this._program, 'uNormalMapId');
+  this._uniformLocs.normalMapEnabled = this._gl.getUniformLocation(this._program, 'uNormalMapEnabled');
 
   for (var i=0; i<10; i++){
     this._uniformLocs.lights.push({
@@ -113,17 +110,11 @@ Renderer.prototype._initUniformLocations = function(){
 
 Renderer.prototype._initMeshes = function(){
   for(var i in this._meshes){ 
-    this._meshes[i].init(this._gl, this._vPosition, this._vNormal, this._vTexCoord);
+    this._meshes[i].init(this._gl, this._vPosition, this._vNormal, this._vTexCoord, this._vTangent, this._vBitangent);
   }
 }
 
-Renderer.prototype._initTextures = function(){
-  for(var i in this._textures){
-    this._textures[i].init(this._gl, this._uniformLocs.textureId);
-  }
-}
-
-Renderer.prototype._loadUniforms = function(instance, lights, camera, texture){
+Renderer.prototype._loadUniforms = function(instance, lights, camera, texture, normalMap){
   this._gl.uniformMatrix4fv(this._uniformLocs.modelMatrix, false, flatten(instance.modelMatrix()));
 
   var normalMatrix = inverse(mult(camera.viewMatrix(), instance.modelMatrix()));
@@ -155,8 +146,15 @@ Renderer.prototype._loadUniforms = function(instance, lights, camera, texture){
 
   if (texture) {
     this._gl.uniform1i(this._uniformLocs.textureEnabled, 1);
-    this._gl.uniform1i(this._uniformLocs.textureId, texture.id);
+    this._gl.uniform1i(this._uniformLocs.textureId, 0);
   } else {
     this._gl.uniform1i(this._uniformLocs.textureEnabled, 0);
+  }
+
+  if (normalMap && settings.normalMapping) {
+    this._gl.uniform1i(this._uniformLocs.normalMapEnabled, 1);
+    this._gl.uniform1i(this._uniformLocs.normalMapId, 1);
+  } else {
+    this._gl.uniform1i(this._uniformLocs.normalMapEnabled, 0);
   }
 }

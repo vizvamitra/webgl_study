@@ -1,9 +1,7 @@
-var scene, camera, events, rotation;
+var scene, camera, events, rotation, settings;
 
-rotation = {
-  axis: vec3(0.0, 1.0, 0.0),
-  direction: -1,
-  speed: 1
+settings = {
+  normalMapping: true
 }
 
 window.onload = function(){
@@ -37,10 +35,11 @@ function mainLoop(){
   requestAnimFrame(mainLoop);
 }
 
-// function onCheckboxSwitch(event, index){
-//   var checkbox = event.target;
-//   scene.lights[index].enabled = checkbox.checked;
-// }
+function onCheckboxSwitch(event){
+  var checkbox = event.target;
+  console.log(checkbox)
+  settings[checkbox.name] = checkbox.checked;
+}
 
 // function onRotationAxisChange(event){
 //   var axices = [

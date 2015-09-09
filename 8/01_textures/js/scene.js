@@ -17,14 +17,9 @@ Scene.prototype.init = function(){
   this.lights = [
     new LightSource({
       position: vec4(0.0, 0.0, 1.0, 0.0),
-      ambient: vec4(0.6, 0.6, 0.6, 1.0),
-      diffuse: vec4(1.5, 1.5, 1.5, 1.0),
-      specular: vec4(1.0, 1.0, 1.0, 1.0),
-      attenuation: {
-        constant: 0.0,
-        linear: 0.0,
-        exp: 0.0
-      }
+      ambient: vec4(0.5, 0.5, 0.5, 1.0),
+      diffuse: vec4(1.3, 1.3, 1.3, 1.0),
+      specular: vec4(0.7, 0.7, 0.7, 1.0)
     })
   ];
 };

@@ -14,14 +14,18 @@
     attribute vec4 vPosition;
     attribute vec4 vNormal;
     attribute vec2 vTexCoord;
+    attribute vec4 vTangent;
+    attribute vec4 vBitangent;
     
     uniform mat4 uModelMatrix;
     uniform mat4 uViewMatrix;
     uniform mat4 uProjMatrix;
 
     varying vec3 fPosition;
-    varying vec4 fNormal;
     varying vec2 fTexCoord;
+    varying vec4 fNormal;
+    varying vec4 fTangent;
+    varying vec4 fBitangent;
 
     void main(){
       vec4 viewPosition = uViewMatrix*uModelMatrix*vPosition;
@@ -30,6 +34,8 @@
       fPosition = viewPosition.xyz;
       fNormal = vNormal;
       fTexCoord = vTexCoord;
+      fTangent = vTangent;
+      fBitangent = vBitangent;
     }
   </script>
 
@@ -56,13 +62,17 @@
         
     uniform Light uLights[10];
     uniform Material uMaterial;
-    uniform mat4 uNormalMatrix;
     uniform sampler2D uTextureId;
     uniform bool uTextureEnabled;
+    uniform sampler2D uNormalMapId;
+    uniform bool uNormalMapEnabled;
+    uniform mat4 uNormalMatrix;
 
     varying vec3 fPosition;
-    varying vec4 fNormal;
     varying vec2 fTexCoord;
+    varying vec4 fNormal;
+    varying vec4 fTangent;
+    varying vec4 fBitangent;
 
 
     vec4 calcPointLight(Light light, vec3 E, vec3 N){
@@ -94,11 +104,30 @@
     }
 
 
+    vec3 calcBumpedNormal(){
+      vec3 normal = normalize((uNormalMatrix * fNormal).xyz);
+      vec3 tangent = normalize((uNormalMatrix * fTangent).xyz);
+      vec3 bitangent = normalize((uNormalMatrix * fBitangent).xyz);
+
+      vec3 bumpMapNormal = 2.0 * texture2D(uNormalMapId, fTexCoord).xyz - 1.0;
+
+      mat3 TBN = mat3(tangent, bitangent, normal);
+      vec3 newNormal = TBN * bumpMapNormal;
+      newNormal = normalize(newNormal);
+      return newNormal;
+    }
+
+
     void main(){
       vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
       vec3 N, E;
 
-      N = normalize((uNormalMatrix*fNormal).xyz);
+      if(uNormalMapEnabled){
+        N = calcBumpedNormal();
+      } else {
+        N = normalize((uNormalMatrix * fNormal).xyz);
+      }
+
       E = normalize(-fPosition);
 
       for (int i = 0; i < 10; i++){
@@ -142,16 +171,12 @@
 
     <form class='controls'>
 
-      <fieldset><p>No controls yet</p></fieldset>
-
-      <!-- <fieldset>
-        <label>Light sources: </label>
-        <input type='checkbox' name='light-0' checked onchange='onCheckboxSwitch(event, 0)'/>
-        <input type='checkbox' name='light-1' checked onchange='onCheckboxSwitch(event, 1)'/>
-        <input type='checkbox' name='light-2' checked onchange='onCheckboxSwitch(event, 2)'/>
+      <fieldset>
+        <label>Normal mapping: </label>
+        <input type='checkbox' name='normalMapping' checked onchange='onCheckboxSwitch(event)'/>
       </fieldset>
 
-      <fieldset class='ranges'>
+      <!-- <fieldset class='ranges'>
         <label for='rotationSpeed'>Lights rotation speed</label>
         <output class='rotationSpeed'>1</output>
         <input type='range' name='rotationSpeed' min=0 max=5 step=0.1 value=1 oninput='onRotationSpeedChange(event)'><br>
