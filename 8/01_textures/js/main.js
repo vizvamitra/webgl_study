@@ -37,7 +37,6 @@ function mainLoop(){
 
 function onCheckboxSwitch(event){
   var checkbox = event.target;
-  console.log(checkbox)
   settings[checkbox.name] = checkbox.checked;
 }
 
