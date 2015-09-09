@@ -1,7 +1,9 @@
 var scene, camera, events, rotation, settings;
 
 settings = {
-  normalMapping: true
+  normalMapping: true,
+  rotation: true,
+  rotationSpeed: 0.2
 }
 
 window.onload = function(){
@@ -27,7 +29,7 @@ function initScene(){
 }
 
 function mainLoop(){
-  scene.instances[0].angles[1] += 0.2;
+  if (settings.rotation) scene.instances[0].angles[1] += settings.rotationSpeed;
 
   camera.update();
 
@@ -57,11 +59,11 @@ function onCheckboxSwitch(event){
 //   rotation.direction = -rotation.direction;
 // }
 
-// function onRotationSpeedChange(evt, model){
-//   var input = evt.target;
+function onRotationSpeedChange(evt, model){
+  var input = evt.target;
 
-//   rotation.speed = parseFloat(input.value);
+  settings.rotationSpeed = parseFloat(input.value);
 
-//   var output = input.parentNode.getElementsByClassName('rotationSpeed')[0];
-//   output.innerHTML = input.value;
-// }
+  var output = input.parentNode.getElementsByClassName('rotationSpeed')[0];
+  output.innerHTML = input.value;
+}
