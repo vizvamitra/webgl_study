@@ -4,7 +4,6 @@ settings = {
   colorMapping: true,
   normalMapping: true,
   specularMapping: true,
-  rotation: true,
   rotationSpeed: 0.2
 }
 
@@ -31,7 +30,7 @@ function initScene(){
 }
 
 function mainLoop(){
-  if (settings.rotation) scene.instances[0].angles[1] += settings.rotationSpeed;
+  scene.instances[0].angles[1] += settings.rotationSpeed;
 
   camera.update();
 
@@ -61,11 +60,21 @@ function onCheckboxSwitch(event){
 //   rotation.direction = -rotation.direction;
 // }
 
-function onRotationSpeedChange(evt, model){
+function onRotationSpeedChange(evt){
   var input = evt.target;
 
   settings.rotationSpeed = parseFloat(input.value);
 
   var output = input.parentNode.getElementsByClassName('rotationSpeed')[0];
+  output.innerHTML = input.value;
+}
+
+function onLightChange(evt){
+  var input = evt.target;
+  var value = parseFloat(input.value);
+
+  scene.lights[0][input.name] = vec4(value, value, value, 1.0);
+
+  var output = input.parentNode.getElementsByClassName(input.name)[0];
   output.innerHTML = input.value;
 }

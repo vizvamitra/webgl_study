@@ -59,7 +59,7 @@ EventsEngine.prototype._onMouseWheel = function(event){
   event.preventDefault();
   camera.distance += event.deltaY/100;
   if(camera.distance > 5) camera.distance = 5;
-  if(camera.distance < 2) camera.distance = 2;
+  if(camera.distance < 2.0) camera.distance = 2.0;
 }
 
 EventsEngine.prototype._getMousePos = function(clientX, clientY){
