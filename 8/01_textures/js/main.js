@@ -60,6 +60,12 @@ function onCheckboxSwitch(event){
 //   rotation.direction = -rotation.direction;
 // }
 
+function onTextureSwitch(evt){
+  var input = evt.target;
+
+  scene.instances[0].mesh = input.value;
+}
+
 function onRotationSpeedChange(evt){
   var input = evt.target;
 

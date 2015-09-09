@@ -9,7 +9,7 @@ Scene.prototype.init = function(){
   this.renderer.init();
   this.instances = [
     new Instance({
-      mesh: 'sphere',
+      mesh: 'earth',
       angles: vec3(0.0, 0.0, -23.439281)
     }),
   ];

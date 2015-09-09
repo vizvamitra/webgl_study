@@ -5,8 +5,8 @@ window.Renderer = function(canvasId){
   this._program = undefined;
 
   this._meshes = {
-    cube: new Mesh(new Cube(), new Texture('cube.png')),
-    sphere: new Mesh(new Sphere(), new Texture('sphere.jpg'), new Texture('earth_normalmap_2.jpg', 1), new Texture('earth_specularmap.jpg', 2)),
+    earth: new Mesh(new Sphere(), new Texture('earth_texture.jpg'), new Texture('earth_normalmap.jpg', 1), new Texture('earth_specularmap.jpg', 2)),
+    mars: new Mesh(new Sphere(), new Texture('mars_texture.jpg'), new Texture('mars_normalmap.jpg', 1), new Texture('mars_specularmap.jpg', 2)),
     skybox: new Mesh(new Skybox(), new Texture('skybox.jpg')),
   };
 
