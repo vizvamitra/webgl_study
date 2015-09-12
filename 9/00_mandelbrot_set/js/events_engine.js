@@ -31,6 +31,11 @@ EventsEngine.prototype._onMouseMove = function(event){
 
     center[0] = this.oldCenter.x - mouseVec[0]/(scale*this._canvas.width);
     center[1] = this.oldCenter.y + mouseVec[1]/(scale*this._canvas.height);
+
+    if (center[0] < -2.0) center[0] = -2.0;
+    if (center[0] > 1.0) center[0] = 1.0;
+    if (center[1] < -1.5) center[1] = -1.5;
+    if (center[1] > 1.5) center[1] = 1.5;
   }
 };
 
@@ -54,7 +59,9 @@ EventsEngine.prototype._onMouseDown = function(event){
 
 EventsEngine.prototype._onMouseWheel = function(event){
   event.preventDefault();
-  scale *= Math.sign(event.deltaY) == 1 ? 0.66666 : 1.5;
+  var sign = Math.sign(event.deltaY)
+  if(scale > 0.4 && sign == 1) scale /=  1.5;
+  if(scale < 200000 && sign == -1) scale *=  1.5
 
 }
 

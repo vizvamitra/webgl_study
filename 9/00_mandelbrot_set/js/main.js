@@ -1,7 +1,7 @@
 var renderer, texture, events;
 
-var center = vec2(-0.5, 0.0);
-var scale = 0.5;
+var center = vec2(-0.6, 0.0);
+var scale = 0.3;
 
 var plane = [
   vec2(-1, -1), vec2(-1, 1), vec2(1, 1),
