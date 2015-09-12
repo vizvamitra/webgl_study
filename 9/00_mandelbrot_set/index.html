@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebGL - Mandelbrot set</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+
+
+    varying vec4 fPosition;
+
+    void main(){
+      gl_Position = vPosition;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+
+    uniform sampler2D uTextureId;
+    uniform vec2 uCenter;
+    uniform float uScale;
+    uniform float uN;
+    uniform float uM;
+
+    void main(){
+      const int max = 100;
+      float v;
+
+      float x = gl_FragCoord.x/(uN * uScale) + uCenter.x - 1.0/(2.0*uScale);
+      float y = gl_FragCoord.y/(uM * uScale) + uCenter.y - 1.0/(2.0*uScale);
+
+      float ax = 0.0, ay = 0.0;
+      float bx, by;
+      
+      int iters;
+
+      for(int k=0; k < max; k++) {
+        bx = ax*ax - ay*ay;
+        by = 2.0*ax*ay;
+        ax = bx+x;
+        ay = by+y;
+        v = ax*ax + ay*ay;
+
+        iters = k;
+        if(v > 4.0) break;
+      }
+
+      float tx = iters == max ? 0.0 : float(iters) / float(max);
+      gl_FragColor = texture2D(uTextureId, vec2(tx, 0.0));
+    }
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <script type="text/javascript" src="../../common/webgl_utils.js"></script>
+  <script type="text/javascript" src="../../common/init_shaders.js"></script>
+  <script type="text/javascript" src="../../common/mv.js"></script>
+  <script type="text/javascript" src="js/renderer.js"></script>
+  <script type="text/javascript" src="js/texture.js"></script>
+  <script type="text/javascript" src="js/events_engine.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+  <a href='../../index.html'>Back</a> | <a href='https://github.com/Vizvamitra/webgl_study/tree/master/9/00_mandelbrot_set'>Github</a><br><br>
+
+  <div class='container'>
+    <canvas id='gl-canvas' width=700 height=700>
+      Canvas is not supported by your browser...
+    </canvas>
+  </div>
+
+  <div id='info'>
+    <p>Move image with mouse</p>
+    <p>Use mouse wheel to zoom in/out</p>
+  </div>
+
+</body>
+</html>
